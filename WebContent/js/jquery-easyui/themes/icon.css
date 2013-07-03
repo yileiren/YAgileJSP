@@ -1,0 +1,100 @@
+.icon-blank{
+	background:url('icons/blank.gif') no-repeat;
+}
+.icon-add{
+	background:url('icons/edit_add.png') no-repeat;
+}
+.icon-edit{
+	background:url('icons/pencil.png') no-repeat;
+}
+.icon-remove{
+	background:url('icons/edit_remove.png') no-repeat;
+}
+.icon-save{
+	background:url('icons/filesave.png') no-repeat;
+}
+.icon-cut{
+	background:url('icons/cut.png') no-repeat;
+}
+.icon-ok{
+	background:url('icons/ok.png') no-repeat;
+}
+.icon-no{
+	background:url('icons/no.png') no-repeat;
+}
+.icon-cancel{
+	background:url('icons/cancel.png') no-repeat;
+}
+.icon-reload{
+	background:url('icons/reload.png') no-repeat;
+}
+.icon-search{
+	background:url('icons/search.png') no-repeat;
+}
+.icon-print{
+	background:url('icons/print.png') no-repeat;
+}
+.icon-help{
+	background:url('icons/help.png') no-repeat;
+}
+.icon-undo{
+	background:url('icons/undo.png') no-repeat;
+}
+.icon-redo{
+	background:url('icons/redo.png') no-repeat;
+}
+.icon-back{
+	background:url('icons/back.png') no-repeat;
+}
+.icon-sum{
+	background:url('icons/sum.png') no-repeat;
+}
+.icon-tip{
+	background:url('icons/tip.png') no-repeat;
+}
+.icon-userlogin{
+	background:url('icons/userlogin.png') no-repeat;
+}
+.icon-menu{
+	background:url('icons/menu.png') no-repeat;
+}
+.icon-home{
+	background:url('icons/home.png') no-repeat;
+}
+.icon-systemMenu{
+	background:url('icons/systemMenu.png') no-repeat;
+}
+.icon-systemSetting{
+	background:url('icons/systemSetting.png') no-repeat;
+}
+.icon-system{
+	background:url('icons/system.png') no-repeat;
+}
+.icon-role{
+	background:url('icons/role.png') no-repeat;
+}
+.icon-organization{
+	background:url('icons/organization.png') no-repeat;
+}
+.icon-dictionary{
+	background:url('icons/dictionary.png') no-repeat;
+}
+.icon-out{
+	background:url('icons/out.png') no-repeat;
+}
+.icon-key{
+	background:url('icons/key.png') no-repeat;
+}
+.icon-supplies{
+	background:url('icons/supplies.png') no-repeat;
+}
+
+.icon-mini-add{
+	background:url('icons/mini_add.png') no-repeat 2px 2px;
+}
+.icon-mini-edit{
+	background:url('icons/mini_edit.png') no-repeat 2px 2px;
+}
+.icon-mini-refresh{
+	background:url('icons/mini_refresh.png') no-repeat 3px 2px;
+}
