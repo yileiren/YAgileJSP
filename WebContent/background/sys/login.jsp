@@ -33,14 +33,8 @@
         {
             if ($("#txtUserName").validatebox("isValid"))
             {
-
                 changePassword();
-                return true;
-            }
-            else 
-            {
-
-                return false;
+                $("#loginForm").submit();
             }
         }
 
@@ -73,10 +67,7 @@
             {
                 if (e.keyCode == 13)
                 {
-                    if (checkForms())
-                    {
-                        __doPostBack('butLogin', '')
-                    }
+                	$("#butLogin").click();
                 }
             });
         });
@@ -84,7 +75,7 @@
     </script>
 </head>
 <body style="padding:0px;margin:0px;background-color:#89BBDE">
-    <form id="form1">
+    <form id="loginForm" method="post" action="login.action">
     <div style="background-color:#4550B8;padding:0px;margin:0px;width:100%;height:30px;top:0px;left:0px;right:0px;bottom:0px">
     </div>
 
