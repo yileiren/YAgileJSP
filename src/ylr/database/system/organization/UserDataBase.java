@@ -74,6 +74,41 @@ public class UserDataBase
 	 * 
 	 * @param userName 用户名。
 	 * @param userPassword 密码。
+	 * @return 成功返回用户信息，否则返回null。
+	 */
+	public UserInfo login(String logName,String logPassword)
+	{
+		UserInfo user = null;
+		
+		try
+		{
+			if(this.userDatabase.connectDataBase())
+			{
+				user = this.login(logName, logPassword, this.userDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.userDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.userDatabase.disconnectDataBase();
+		}
+		
+		return user;
+	}
+	
+	/**
+	 * 用户登陆。
+	 * 
+	 * @param userName 用户名。
+	 * @param userPassword 密码。
 	 * @param db 使用的数据库连接。
 	 * @return 成功返回用户信息，否则返回null。
 	 */
