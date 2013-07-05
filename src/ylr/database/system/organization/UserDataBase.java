@@ -1,11 +1,9 @@
 package ylr.database.system.organization;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import ylr.YDB.YDataBase;
 import ylr.YDB.YDataBaseConfig;
 import ylr.YDB.YDataBaseType;
+import ylr.YDB.YDataTable;
 import ylr.YDB.YSqlParameters;
 
 /**
@@ -115,7 +113,6 @@ public class UserDataBase
 	public UserInfo login(String logName,String logPassword,YDataBase db)
 	{
 		UserInfo user = null;
-		ResultSet rs = null;
 		
 		try
 		{
@@ -137,41 +134,40 @@ public class UserDataBase
 			ps.addParameter(2, logPassword);
 			
 			//执行语句
-			rs = db.executeSqlReturnData(sql, ps);
-			if(null != rs)
+			YDataTable table = db.executeSqlReturnData(sql, ps);
+			if(null != table)
 			{
-				if(rs.next())
+				if(table.rowCount() > 0)
 				{
 					user = new UserInfo();
-					user.setId(rs.getInt("ID"));
-					
-					user.setName(rs.getString("NAME"));
-					if(rs.wasNull())
+					if(null != table.getData(0,"ID"))
 					{
-						user.setName("");
+						user.setId((Integer)table.getData(0,"ID"));
 					}
 					
-					user.setLogName(rs.getString("LOGNAME"));
-					if(rs.wasNull())
+					if(null != table.getData(0,"NAME"))
 					{
-						user.setLogName("");
+						user.setName((String)table.getData(0,"NAME"));
 					}
 					
-					user.setLogPassword("LOGPASSWORD");
-					if(rs.wasNull())
+					if(null != table.getData(0,"LOGNAME"))
 					{
-						user.setLogPassword("");
+						user.setLogName((String)table.getData(0,"LOGNAME"));
 					}
 					
-					user.setOrganizationId(rs.getInt("ORGANIZATIONID"));
-					if(rs.wasNull())
+					if(null != table.getData(0, "LOGPASSWORD"))
 					{
-						user.setOrganizationId(-1);
+						user.setLogPassword((String)table.getData(0, "LOGPASSWORD"));
 					}
 					
-					String isDelete = rs.getString("ISDELETE");
-					if(!rs.wasNull())
+					if(null != table.getData(0, "ORGANIZATIONID"))
 					{
+						user.setOrganizationId((Integer)table.getData(0, "ORGANIZATIONID"));
+					}
+					
+					if(null != table.getData(0, "ISDELETE"))
+					{
+						String isDelete = (String)table.getData(0, "ISDELETE");
 						if(isDelete.equals("N"))
 						{
 							user.setDelete(false);
@@ -182,7 +178,10 @@ public class UserDataBase
 						}
 					}
 					
-					user.setOrder(rs.getInt("ORDER"));
+					if(null != table.getData(0, "ORDER"))
+					{
+						user.setOrder((Integer)table.getData(0, "ORDER"));
+					}
 				}
 				else
 				{
@@ -199,20 +198,6 @@ public class UserDataBase
 		catch(Exception ex)
 		{
 			this.lastErrorMessage = ex.getMessage();
-		}
-		finally
-		{
-			if(null != rs)
-			{
-				try
-				{
-					rs.close();
-				}
-				catch (SQLException e)
-				{
-					e.printStackTrace();
-				}
-			}
 		}
 		
 		return user;
