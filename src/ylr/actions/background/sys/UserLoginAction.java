@@ -25,14 +25,27 @@ public class UserLoginAction extends ActionSupport
 	private static final long serialVersionUID = 1L;
 	
 	
-	private String txtUserName;
+	private String txtUserName = "";
 	
-	private String passUserPassword;
+	private String passUserPassword = "";
+	
+	private String errorMessage = "";
 	
 	public String execute() throws Exception
     {
-		this.login();
-        return SUCCESS;
+		String retValue = ERROR;
+		try
+		{
+			if(this.login())
+			{
+				retValue = SUCCESS;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.errorMessage = ex.getMessage();
+		}
+		return retValue;
     }
 
 	public String getTxtUserName()
@@ -54,14 +67,20 @@ public class UserLoginAction extends ActionSupport
 	{
 		this.passUserPassword = passUserPassword;
 	}
+	
+	public String getErrorMessage()
+	{
+		return this.errorMessage;
+	}
 
 	
 	/**
 	 * 用户登陆。
 	 * 
 	 * @return 成功返回true，否则返回false。
+	 * @throws Exception 未处理异常。
 	 */
-	private boolean login()
+	private boolean login() throws Exception
 	{
 		boolean retValue = false;
 		
@@ -79,7 +98,6 @@ public class UserLoginAction extends ActionSupport
 				}
 				else
 				{
-					System.out.println(db.getLastErrorMessage());
 					Exception e = new Exception("用户登陆失败！" + db.getLastErrorMessage());
 					throw e;
 				}
@@ -92,7 +110,7 @@ public class UserLoginAction extends ActionSupport
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			throw e;
 		}
 		
 		return retValue;

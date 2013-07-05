@@ -77,6 +77,7 @@
 <body style="padding:0px;margin:0px;background-color:#89BBDE">
     <form id="loginForm" method="post" action="login.action">
     <div style="background-color:#4550B8;padding:0px;margin:0px;width:100%;height:30px;top:0px;left:0px;right:0px;bottom:0px">
+    <%=request.getAttribute("errorMessage") %>
     </div>
 
     <div style="width:100%;height:100%;margin-left:auto;margin-right:auto;margin-top:10%;margin-bottom:0px;float:left">

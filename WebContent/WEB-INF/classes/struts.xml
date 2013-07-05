@@ -5,7 +5,8 @@
 <struts>
 	<package name="background" namespace="/background/sys" extends="struts-default">
 		<action name="login" class="ylr.actions.background.sys.UserLoginAction">
-			<result name="success">/index.jsp</result>
+			<result name="success" type="redirect">/background/mainPage.jsp</result>
+			<result name="error" type="redirect">/background/sys/login.jsp</result>
 		</action>
 	</package>
 </struts>
