@@ -1,13 +1,11 @@
 package ylr.actions.background.sys;
 
-import org.apache.catalina.connector.Request;
 import org.apache.struts2.ServletActionContext;
 
 import ylr.YCrypto.MD5Encrypt;
 import ylr.database.system.organization.UserDataBase;
 import ylr.database.system.organization.UserInfo;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
@@ -43,7 +41,7 @@ public class UserLoginAction extends ActionSupport
 		}
 		catch(Exception ex)
 		{
-			this.errorMessage = ex.getMessage();
+			this.setErrorMessage(ex.getMessage());
 		}
 		return retValue;
     }
@@ -67,12 +65,6 @@ public class UserLoginAction extends ActionSupport
 	{
 		this.passUserPassword = passUserPassword;
 	}
-	
-	public String getErrorMessage()
-	{
-		return this.errorMessage;
-	}
-
 	
 	/**
 	 * 用户登陆。
@@ -114,5 +106,15 @@ public class UserLoginAction extends ActionSupport
 		}
 		
 		return retValue;
+	}
+
+	public String getErrorMessage()
+	{
+		return errorMessage;
+	}
+
+	public void setErrorMessage(String errorMessage)
+	{
+		this.errorMessage = errorMessage;
 	}
 }
