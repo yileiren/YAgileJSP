@@ -10,7 +10,7 @@ public class SystemConfig
 	/**
 	 * 数据库配置文件名称。
 	 */
-	public final static String databaseConfigFileName = "DataBaseConfig.xml";
+	public final static String databaseConfigFileName = "WEB-INF/DataBaseConfig.xml";
 	
 	/**
 	 * 数据库配置文件节点名称。
