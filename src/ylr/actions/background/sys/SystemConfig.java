@@ -10,10 +10,10 @@ public class SystemConfig
 	/**
 	 * 数据库配置文件名称。
 	 */
-	final static String databaseConfigFileName = "DataBaseConfig.xml";
+	public final static String databaseConfigFileName = "DataBaseConfig.xml";
 	
 	/**
 	 * 数据库配置文件节点名称。
 	 */
-	final static String databaseConfigNodeName = "SQLServer";
+	public final static String databaseConfigNodeName = "SQLServer";
 }

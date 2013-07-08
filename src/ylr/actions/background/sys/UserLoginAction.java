@@ -1,5 +1,7 @@
 package ylr.actions.background.sys;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts2.ServletActionContext;
 
 import ylr.YCrypto.MD5Encrypt;
@@ -85,7 +87,10 @@ public class UserLoginAction extends ActionSupport
 				UserInfo user = db.login(this.txtUserName, MD5Encrypt.getMD5(this.passUserPassword));
 				if(user != null)
 				{
-					System.out.println(user.getName());
+					//用户信息加入session
+					HttpServletRequest request = ServletActionContext.getRequest();
+					request.getSession().setAttribute("UserInfo", user);
+					
 					retValue = true;
 				}
 				else

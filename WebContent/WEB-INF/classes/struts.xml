@@ -3,8 +3,18 @@
      "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
      "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
-	<package name="background" namespace="/background/sys" extends="struts-default">
+	<package name="backgroundSys" namespace="/background/sys" extends="struts-default">
 		<action name="login" class="ylr.actions.background.sys.UserLoginAction">
+			<result name="success" type="chain">
+				<param name="actionName">mainPage</param>
+				<param name="namespace">/background</param>
+			</result>
+			<result name="error">/background/sys/login.jsp</result>
+		</action>
+	</package>
+	
+	<package name="background" namespace="/background" extends="struts-default">
+		<action name="mainPage" class="ylr.actions.background.mainPageAction">
 			<result name="success">/background/mainPage.jsp</result>
 			<result name="error">/background/sys/login.jsp</result>
 		</action>
