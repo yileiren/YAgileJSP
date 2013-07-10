@@ -16,7 +16,7 @@
   -->
   <SQLServer databaseType="MSSQL">
     <!--服务器-->
-    <ServerName Crypto="NO">192.168.1.30</ServerName>
+    <ServerName Crypto="NO">192.168.56.30</ServerName>
     <!--数据库端口号，如果不配置则问默认端口-->
     <ServerPort Crypto="NO">1433</ServerPort>
     <!--数据库名称-->
