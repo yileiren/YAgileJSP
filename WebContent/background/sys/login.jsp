@@ -76,7 +76,7 @@
                 }
             });
             
-            var errorMessage = "<s:actionmessage />";
+            var errorMessage = "<s:property value="errorMessage" />";
             if("" != errorMessage)
             {
             	$.messager.alert("提示",errorMessage,"info");
