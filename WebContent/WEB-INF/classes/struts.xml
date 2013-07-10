@@ -3,20 +3,37 @@
      "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
      "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
-	<package name="backgroundSys" namespace="/background/sys" extends="struts-default">
+	<package name="background" namespace="/background" extends="struts-default">
+		<!-- 定义一个拦截器 -->  
+		<interceptors>  
+			<interceptor name="background" class="ylr.Interceptor.background.MainInterceptor">  
+			</interceptor>  
+			<!-- 拦截器栈 -->  
+			<interceptor-stack name="mainInterceptor">  
+				<interceptor-ref name="defaultStack" />  
+				<interceptor-ref name="background" />  
+			</interceptor-stack>  
+		</interceptors>
+		
+		<!-- 全局返回值 -->
+		<global-results>
+			<result name="login">/background/sys/login.jsp</result>
+		</global-results>
+	
+		<!-- 后台主界面 -->
+		<action name="mainPage" class="ylr.actions.background.mainPageAction">
+			<result name="success">/background/mainPage.jsp</result>
+			
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
+		
+		<!-- 登陆 -->
 		<action name="login" class="ylr.actions.background.sys.UserLoginAction">
 			<result name="success" type="chain">
 				<param name="actionName">mainPage</param>
 				<param name="namespace">/background</param>
 			</result>
-			<result name="error">/background/sys/login.jsp</result>
-		</action>
-	</package>
-	
-	<package name="background" namespace="/background" extends="struts-default">
-		<action name="mainPage" class="ylr.actions.background.mainPageAction">
-			<result name="success">/background/mainPage.jsp</result>
-			<result name="error">/background/sys/login.jsp</result>
 		</action>
 	</package>
 </struts>

@@ -33,7 +33,7 @@ public class UserLoginAction extends ActionSupport
 	
 	public String execute() throws Exception
     {
-		String retValue = ERROR;
+		String retValue = LOGIN;
 		try
 		{
 			if(this.login())

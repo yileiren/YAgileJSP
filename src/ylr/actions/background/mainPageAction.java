@@ -31,7 +31,7 @@ public class mainPageAction extends ActionSupport
 		if(this.buildMainPage())
 			return SUCCESS;
 		else
-			return ERROR;
+			return LOGIN;
 	}
 
 	/**
