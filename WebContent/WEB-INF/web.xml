@@ -11,4 +11,9 @@
 		<filter-name>struts2</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
+	<!-- session过期时间，单位：分钟。 -->
+	<session-config>
+        <session-timeout>10</session-timeout>
+  	</session-config>
 </web-app>
