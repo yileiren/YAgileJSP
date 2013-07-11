@@ -94,7 +94,7 @@
 		<s:iterator value="mainPageMenus" id="menu">
 		<div data-options="title:'<s:property value="#menu.name"/>',iconCls:'<s:property value="#menu.icon"/>'" style="overflow:auto;padding:3px;overflow-x:hidden">
 		<s:iterator value="#menu.childMenus" id="cmenu">
-			<a href="#" class="easyui-linkbutton" data-options="iconCls:'<s:property value="#cmenu.icon"/>',plain:true" style="width:100%" onclick="javascript:menuButtonOnClick('<s:property value="#cmenu.name"/>','<s:property value="#cmenu.icon"/>','<s:property value="#cmenu.URL"/>');"><s:property value="#cmenu.name"/></a>
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'<s:property value="#cmenu.icon"/>',plain:true" style="width:100%" onclick="javascript:menuButtonOnClick('<s:property value="#cmenu.name"/>','<s:property value="#cmenu.icon"/>','<%=basePath%>/background/<s:property value="#cmenu.URL"/>');"><s:property value="#cmenu.name"/></a>
 		</s:iterator>
 		</div>
 		</s:iterator>
