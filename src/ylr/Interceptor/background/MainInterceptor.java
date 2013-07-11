@@ -5,6 +5,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
 
+import ylr.actions.background.sys.SystemConfig;
+import ylr.database.system.organization.UserInfo;
+
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
@@ -15,22 +18,30 @@ public class MainInterceptor extends AbstractInterceptor
 	
 	public String intercept(ActionInvocation actionInvocation) throws Exception
 	{
+		String retValue = ""; //返回值。
+		
 		//获取用户访问路径。
 		HttpServletRequest request = ServletActionContext.getRequest();
 		String uri = request.getRequestURI();
 		
-		System.out.println(uri.substring(request.getContextPath().length()));
-		System.out.println(uri.substring(request.getContextPath().length()).indexOf("/background"));
+		//不是后台管理功能不拦截。
+		if(0 == uri.substring(request.getContextPath().length()).indexOf("/background"))
+		{
+			//判断用户是否登陆
+			UserInfo user = (UserInfo) request.getSession().getAttribute(SystemConfig.sessionUserInfoName);
+			
+			if(null == user)
+			{
+				request.setAttribute("interceptorErrorMessage", "用户未登陆或登陆超时，请重新登陆！");
+				retValue = Action.LOGIN;
+			}
+		}
 		
-		if(0 != uri.substring(request.getContextPath().length()).indexOf("/background"))
+		if("" == retValue)
 		{
-			//不是后台管理功能不拦截。
-			return actionInvocation.invoke();
+			retValue = actionInvocation.invoke();
 		}
-		else
-		{
-			request.setAttribute("errorMessage", "ddd");
-			return Action.LOGIN;
-		}
+		
+		return retValue;
 	}
 }

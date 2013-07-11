@@ -76,7 +76,8 @@
                 }
             });
             
-            var errorMessage = "<s:property value="errorMessage" />";
+            var errorMessage = "<s:property value="#request.interceptorErrorMessage"/>" + "<s:property value="errorMessage" />";
+            
             if("" != errorMessage)
             {
             	$.messager.alert("提示",errorMessage,"info");

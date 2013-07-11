@@ -89,7 +89,7 @@ public class UserLoginAction extends ActionSupport
 				{
 					//用户信息加入session
 					HttpServletRequest request = ServletActionContext.getRequest();
-					request.getSession().setAttribute("UserInfo", user);
+					request.getSession().setAttribute(SystemConfig.sessionUserInfoName, user);
 					
 					retValue = true;
 				}
