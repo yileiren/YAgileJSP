@@ -19,11 +19,11 @@
     <link href="<%=basePath%>/js/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="<%=basePath%>/js/jquery-easyui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
 
-    <script type="text/javascript" src="<%=basePath%>/js/md5.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/jquery-easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
-
+	<script type="text/javascript" src="<%=basePath%>/js/YWindows.js"></script>
+	
     <script language="javascript" type="text/javascript">
     <!--
 	  	//退出系统处理方法。
@@ -39,7 +39,7 @@
 	    //修改密码
 	    function changePassword()
 	    {
-	        popupsWindow("#popups", "修改密码", 300, 165, "sys/changePassword.aspx", "icon-key", true, true);
+	        popupsWindow("#popups", "修改密码", 300, 170, "<%=basePath%>/background/sys/changePassword.jsp", "icon-key", true, true);
 	    }
 	
 	

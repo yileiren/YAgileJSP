@@ -51,7 +51,7 @@ public class mainPageAction extends ActionSupport
 			if(null != user)
 			{
 				retValue = true;
-				MenuDataBase db = MenuDataBase.createMenuDataBase(ServletActionContext.getServletContext().getRealPath("/") + SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
+				MenuDataBase db = MenuDataBase.createMenuDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
 				List<MenuInfo> menus = db.getMainPageMunus(user.getId());
 				if(null != menus)
 				{

@@ -202,4 +202,100 @@ public class UserDataBase
 		
 		return user;
 	}
+	
+	/**
+	 * 修改用户密码。
+	 * 
+	 * @param id 用户id。
+	 * @param oldPsw 旧密码。
+	 * @param newPsw 新密码。
+	 * 
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean changePassword(int id,String oldPsw,String newPsw)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			if(this.userDatabase.connectDataBase())
+			{
+				retValue = this.changePassword(id, oldPsw, newPsw, this.userDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.userDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.userDatabase.disconnectDataBase();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 修改用户密码。
+	 * 
+	 * @param id 用户id。
+	 * @param oldPsw 旧密码。
+	 * @param newPsw 新密码。
+	 * @param db 使用的数据库连接。
+	 * 
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean changePassword(int id,String oldPsw,String newPsw,YDataBase db)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			//构建SQL语句
+			String sql = "";
+			if(YDataBaseType.MSSQL == db.getDatabaseType())
+			{
+				sql = "UPDATE ORG_USER SET LOGPASSWORD = ? WHERE ID = ? AND LOGPASSWORD = ?";
+			}
+			else
+			{
+				Exception e = new Exception("不支持的数据库类型！");
+				throw e;
+			}
+			
+			//参数
+			YSqlParameters ps = new YSqlParameters();
+			ps.addParameter(1, newPsw);
+			ps.addParameter(2, id);
+			ps.addParameter(3, oldPsw);
+			
+			//执行语句
+			int rowCount = db.executeSqlWithOutData(sql, ps);
+			if(rowCount > 0)
+			{
+				retValue = true;
+			}
+			else if(rowCount == 0)
+			{
+				Exception e = new Exception("原密码输入错误。");
+				throw e;
+			}
+			else
+			{
+				Exception e = new Exception(this.userDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		
+		return retValue;
+	}
 }

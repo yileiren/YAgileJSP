@@ -81,7 +81,7 @@ public class UserLoginAction extends ActionSupport
 		try
 		{
 			//创建数据库操作对象。
-			UserDataBase db = UserDataBase.createUserDataBase(ServletActionContext.getServletContext().getRealPath("/") + SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
+			UserDataBase db = UserDataBase.createUserDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
 			if(null != db)
 			{
 				UserInfo user = db.login(this.txtUserName, MD5Encrypt.getMD5(this.passUserPassword));

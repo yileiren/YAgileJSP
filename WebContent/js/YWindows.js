@@ -53,5 +53,15 @@ function popupsWindow(windowId,titleName,windowWidth,windowHeight,pageUrl,window
 function closePopupsWindow(windowId)
 {
     $(windowId).dialog('close');
-    //$("#popupsIframe").attr("src", "");
+}
+
+/*!
+ * \brief
+ * 关闭父窗口中的弹出窗口。
+ * 
+ * \param windowId 窗口id。
+ */
+function closeParentPopupsWindow(windowId)
+{
+	window.parent.closePopupsWindow(windowId);
 }

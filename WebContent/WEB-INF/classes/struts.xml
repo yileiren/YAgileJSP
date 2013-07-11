@@ -39,5 +39,13 @@
 		<!-- 退出登陆 -->
 		<action name="logout" class="ylr.actions.background.sys.UserLogoutAction">
 		</action>
+		
+		<!-- 修改密码 -->
+		<action name="changePassword" class="ylr.actions.background.sys.ChangeUserPasswordAction">
+			<result name="success">/background/sys/changePassword.jsp</result>
+			
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
 	</package>
 </struts>
