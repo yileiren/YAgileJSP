@@ -35,5 +35,9 @@
 				<param name="namespace">/background</param>
 			</result>
 		</action>
+		
+		<!-- 退出登陆 -->
+		<action name="logout" class="ylr.actions.background.sys.UserLogoutAction">
+		</action>
 	</package>
 </struts>

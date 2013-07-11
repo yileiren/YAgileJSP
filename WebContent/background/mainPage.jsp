@@ -10,22 +10,30 @@
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="cache-control" ontent="no-cache" />  
     <meta http-equiv="expires" content="0" />  
-    
-    <link href="../../js/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
-    <link href="../../js/jquery-easyui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <%
+   	String path = request.getContextPath();
+    String basePath = request.getScheme() + "://"
+            + request.getServerName() + ":" + request.getServerPort()
+            + path;
+	%>
+    <link href="<%=basePath%>/js/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="<%=basePath%>/js/jquery-easyui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
 
-    <script type="text/javascript" src="../../js/md5.js"></script>
-    <script type="text/javascript" src="../../js/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="../../js/jquery-easyui/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="../../js/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
-    <script type="text/javascript" src="../../js/YWindows.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/js/md5.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/js/jquery-easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/js/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
 
     <script language="javascript" type="text/javascript">
     <!--
 	  	//退出系统处理方法。
 	    function logOut()
 	    {
-	        return confirm("确定要退出系统？");
+	    	$.messager.confirm("退出", "确定要退出系统？", function(r){
+				if (r){
+					$("#logOutForm").submit();
+				}
+			});
 	    }
 	
 	    //修改密码
@@ -70,13 +78,15 @@
     </script>
 </head>
 <body class="easyui-layout">
-	<div data-options="region:'north',border:false" style="height:50px;background-image:url('../images/mainPage/title_01.gif')">
+	<div data-options="region:'north',border:false" style="height:50px;background-image:url('<%=basePath%>/background/images/mainPage/title_01.gif')">
 		<span style="position:absolute;left:10px">
-            <img src="../images/mainPage/title_02.gif" alt="异类人敏捷开发平台" />
+            <img src="<%=basePath%>/background/images/mainPage/title_02.gif" alt="异类人敏捷开发平台" />
         </span>
         <span style="position:absolute;right:10px;bottom:0px">
             <a id="butChangePassword" href="#" class="easyui-linkbutton" plain="true" iconCls="icon-key" onclick="javascript:changePassword();">修改密码</a>
-            <a id="logOut" href="#" class="easyui-linkbutton" plain="true" iconCls="icon-out" onclick="javascript:return logOut();" >退出系统</a>
+            <a id="logOut" href="#" class="easyui-linkbutton" plain="true" iconCls="icon-out" onclick="javascript:logOut();" >退出系统</a>
+            <form id="logOutForm" method="post" action="<%=basePath%>/background/sys/logout.action">
+            </form>
         </span>
 	</div>
 	<div data-options="region:'west',split:true,title:'菜单',iconCls:'icon-menu'" style="width:250px;padding:3px;background-color:#EEF5FD">

@@ -31,7 +31,7 @@ public class UserLoginAction extends ActionSupport
 	
 	private String errorMessage = "";
 	
-	public String execute() throws Exception
+	public String execute()
     {
 		String retValue = LOGIN;
 		try
