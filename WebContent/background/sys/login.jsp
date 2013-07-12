@@ -57,7 +57,7 @@
         {
             if (window.top.location != window.self.location)
             {
-                window.top.location = "login.jsp";
+                window.top.location = "<%=basePath%>/background/sys/login.jsp";
             }
 
             $("#txtUserName").bind("keypress", function (e)

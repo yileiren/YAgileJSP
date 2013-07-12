@@ -270,4 +270,149 @@ public class MenuDataBase
         
         return menus;
     }
+	
+	/**
+	 * 获取指定父id的菜单。
+	 * 
+	 * @param pId 父菜单id，顶级菜单为-1.
+	 * 
+	 * @return 菜单列表，出错返回null。
+	 */
+	public List<MenuInfo> getMenusByParentId(int pId)
+	{
+		List<MenuInfo> menus = null;
+		
+		try
+		{
+			if(this.menuDatabase.connectDataBase())
+			{
+				menus = this.getMenusByParentId(pId,this.menuDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.menuDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.menuDatabase.disconnectDataBase();
+		}
+		
+		return menus;
+	}
+	
+	/**
+	 * 获取指定父id的菜单。
+	 * 
+	 * @param pId 父菜单id，顶级菜单为-1.
+	 * @param db 数据库连接。
+	 * 
+	 * @return 菜单列表，出错返回null。
+	 */
+	public List<MenuInfo> getMenusByParentId(int pId,YDataBase db)
+	{
+		List<MenuInfo> menus = null;
+		
+		try
+        {
+        	//构建SQL语句
+			String sql = "";
+			if(YDataBaseType.MSSQL == db.getDatabaseType())
+			{
+				if(pId == -1)
+				{
+					sql = "SELECT * FROM SYS_MENUS WHERE PARENTID IS NULL ORDER BY [ORDER] ASC";
+				}
+				else
+				{
+					sql = "SELECT * FROM SYS_MENUS WHERE PARENTID = ? ORDER BY [ORDER] ASC";
+				}
+			}
+			else
+			{
+				Exception e = new Exception("不支持的数据库类型！");
+				throw e;
+			}
+			
+			
+			
+			//执行语句
+			YDataTable table = null;
+			
+			if(pId == -1)
+			{
+				table = db.executeSqlReturnData(sql);
+			}
+			else
+			{
+				//参数
+				YSqlParameters ps = new YSqlParameters();
+				ps.addParameter(1, pId);
+				table = db.executeSqlReturnData(sql, ps);
+			}
+			
+			if(null != table)
+			{
+				menus = new ArrayList<MenuInfo>();
+				
+				//构建菜单。
+				for(int i = 0;i < table.rowCount();i++)
+				{
+					MenuInfo pMenu = new MenuInfo();
+					if(null != table.getData(i,"ID"))
+					{
+						pMenu.setId((Integer)table.getData(i,"ID"));
+					}
+					
+					if(null != table.getData(i,"NAME"))
+					{
+						pMenu.setName((String)table.getData(i,"NAME"));
+					}
+					
+					if(null != table.getData(i,"URL"))
+					{
+						pMenu.setURL((String)table.getData(i,"URL"));
+					}
+					
+					if(null != table.getData(i,"PARENTID"))
+					{
+						pMenu.setParentId((Integer)table.getData(i,"PARENTID"));
+					}
+					
+					if(null != table.getData(i,"ICON"))
+					{
+						pMenu.setIcon((String)table.getData(i,"ICON"));
+					}
+					
+					if(null != table.getData(i,"DESKTOPICON"))
+					{
+						pMenu.setDesktopIcon((String)table.getData(i,"DESKTOPICON"));
+					}
+					
+					if(null != table.getData(i,"ORDER"))
+					{
+						pMenu.setOrder((Integer)table.getData(i,"ORDER"));
+					}
+					
+					menus.add(pMenu);
+				}
+			}
+			else
+			{
+				Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+				throw e;
+			}
+        }
+        catch(Exception ex)
+        {
+        	this.lastErrorMessage = ex.getMessage();
+        }
+		
+		return menus;
+	}
 }

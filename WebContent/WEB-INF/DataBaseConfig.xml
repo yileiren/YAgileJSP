@@ -20,7 +20,7 @@
     <!--数据库端口号，如果不配置则问默认端口-->
     <ServerPort Crypto="NO">1433</ServerPort>
     <!--数据库名称-->
-    <DataBaseName Crypto="NO">YAgileASP</DataBaseName>
+    <DataBaseName Crypto="NO">YAgileJSP</DataBaseName>
     <!--登陆用户名-->
     <UserID Crypto="NO">sa</UserID>
     <!--登陆密码-->

@@ -47,5 +47,13 @@
 			<!-- 使用此拦截器 -->  
             <interceptor-ref name="mainInterceptor" />
 		</action>
+		
+		<!-- 获取菜单列表 -->
+		<action name="menuList" class="ylr.actions.background.sys.menu.MenuListAction">
+			<result name="success">/background/sys/menu/menu_list.jsp</result>
+			
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
 	</package>
 </struts>
