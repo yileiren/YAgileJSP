@@ -158,6 +158,36 @@ public class MenuSaveAction extends ActionSupport
 					throw e;
 				}
 			}
+			else
+			{
+				//修改
+				if(db.changeMenu(menu))
+				{
+					retValue = SUCCESS;
+					this.returnMessage = "修改数据成功！";
+					
+					//设置跳转地址
+					HttpServletRequest request = ServletActionContext.getRequest();
+					this.centerIframeURL = request.getScheme() 
+							+ "://" + request.getServerName() 
+							+ ":" + request.getServerPort() 
+							+request.getContextPath() 
+							+ "/background/sys/menu/menuList.action?topMenuId=";
+					if(this.parentId == -1)
+					{
+						this.centerIframeURL += String.valueOf(this.menuId);
+					}
+					else
+					{
+						this.centerIframeURL += String.valueOf(this.parentId);
+					}
+				}
+				else
+				{
+					Exception e = new Exception("修改数据出错！" + db.getLastErrorMessage());
+					throw e;
+				}
+			}
 		}
 		catch(Exception ex)
 		{
