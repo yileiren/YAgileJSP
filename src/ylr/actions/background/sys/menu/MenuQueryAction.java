@@ -1,5 +1,9 @@
 package ylr.actions.background.sys.menu;
 
+import ylr.actions.background.sys.SystemConfig;
+import ylr.database.system.menu.MenuDataBase;
+import ylr.database.system.menu.MenuInfo;
+
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
@@ -47,12 +51,38 @@ public class MenuQueryAction extends ActionSupport
 	 */
 	private int menuOrder = 0;
 	
+	/**
+	 * 返回消息。
+	 */
+	private String returnMessage = "";
+	
 	public String execute()
 	{
-		if(this.menuId != -1)
+		try
 		{
-			//查询菜单数据。
-			
+			if(this.menuId != -1)
+			{
+				//查询菜单数据。
+				MenuDataBase db = MenuDataBase.createMenuDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
+				MenuInfo menu = db.getMenu(this.menuId);
+				if(null != menu)
+				{
+					this.menuName = menu.getName();
+					this.menuURL = menu.getURL();
+					this.menuIcon = menu.getIcon();
+					this.menuDesktopIcon = menu.getDesktopIcon();
+					this.menuOrder = menu.getOrder();
+				}
+				else
+				{
+					Exception e = new Exception("获取数据出错！" + db.getLastErrorMessage());
+					throw e;
+				}
+			}
+		}
+		catch(Exception ex)
+		{
+			this.returnMessage = ex.getMessage();
 		}
 		return SUCCESS;
 	}
@@ -125,6 +155,16 @@ public class MenuQueryAction extends ActionSupport
 	public void setMenuOrder(int menuOrder)
 	{
 		this.menuOrder = menuOrder;
+	}
+
+	public String getReturnMessage()
+	{
+		return returnMessage;
+	}
+
+	public void setReturnMessage(String returnMessage)
+	{
+		this.returnMessage = returnMessage;
 	}
 
 }

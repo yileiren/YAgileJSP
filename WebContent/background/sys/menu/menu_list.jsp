@@ -46,7 +46,7 @@
          */
         function addGroup()
         {
-            window.parent.popupsWindow("#popups", "新增菜单分组", 700, 230, "<%=basePath%>/background/sys/menu/menuQuery", "icon-add", true, true);
+            window.parent.popupsWindow("#popups", "新增菜单分组", 700, 230, "<%=basePath%>/background/sys/menu/menuQuery.action", "icon-add", true, true);
         }
 		
         /*!
@@ -59,12 +59,12 @@
             //判断选中
             if ($("input:checked[type='checkbox'][name='chkGroup']").length != 1)
             {
-                alert("请选中要编辑的分组，一次只能选择一个！");
+            	window.parent.$.messager.alert("提示","请选中要编辑的分组，一次只能选择一个！","info");
                 return;
             }
 
             //打开编辑页面
-            window.parent.popupsWindow("#popups", "修改菜单分组", 700, 230, "sys/menu/menu_edit.aspx?pageType=group&id=" + $("input:checked[type='checkbox'][name='chkGroup']").eq(0).val(), "icon-edit", true, true);
+            window.parent.popupsWindow("#popups", "修改菜单分组", 700, 230, "<%=basePath%>/background/sys/menu/menuQuery.action?menuId=" + $("input:checked[type='checkbox'][name='chkGroup']").eq(0).val(), "icon-edit", true, true);
         }
 
         /*!
@@ -153,7 +153,7 @@
 		<table class="editTable" style="width:100%;">
 		<s:iterator value="topMenus" id="menu">
 			<tr>
-			<td style="width:30px;text-align:center;"><input type="checkbox"></td>
+			<td style="width:30px;text-align:center;"><input type="checkbox" name="chkGroup"></td>
 			<td>
 			<a href="#" class="easyui-linkbutton" data-options="iconCls:'<s:property value="#menu.icon"/>',plain:true" style="width:200px" onclick="javascript:showMenus(<s:property value="#menu.id"/>)"><s:property value="#menu.name"/></a>
 			</td>
@@ -174,7 +174,7 @@
 			</tr>
 		<s:iterator value="childMenus" id="menu">
 			<tr>
-			<td style="text-align:center;"><input type="checkbox"></td>
+			<td style="text-align:center;"><input type="checkbox" name=""></td>
 			<td><s:property value="#menu.name"/></td>
 			<td style="text-align:center;"><s:property value="#menu.icon"/></td>
 			<td style="text-align:center;"><s:property value="#menu.desktopIcon"/></td>
