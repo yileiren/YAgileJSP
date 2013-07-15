@@ -415,4 +415,285 @@ public class MenuDataBase
 		
 		return menus;
 	}
+	
+	/**
+	 * 获取指定的菜单信息。
+	 * 
+	 * @param id 菜单id。
+	 * 
+	 * @return 成功返回菜单信息，否则返回null。
+	 */
+	public MenuInfo getMenu(int id)
+	{
+		MenuInfo menu = null;
+		
+		try
+		{
+			if(this.menuDatabase.connectDataBase())
+			{
+				menu = this.getMenu(id,this.menuDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.menuDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.menuDatabase.disconnectDataBase();
+		}
+		
+		return menu;
+	}
+	
+	/**
+	 * 获取指定的菜单信息。
+	 * 
+	 * @param id 菜单id。
+	 * @param db 使用的数据库连接。
+	 * 
+	 * @return 成功返回菜单信息，否则返回null。
+	 */
+	public MenuInfo getMenu(int id,YDataBase db)
+	{
+		MenuInfo menu = null;
+		
+		try
+        {
+        	//构建SQL语句
+			String sql = "";
+			if(YDataBaseType.MSSQL == db.getDatabaseType())
+			{
+				sql = "SELECT * FROM SYS_MENUS WHERE ID = ?";
+			}
+			else
+			{
+				Exception e = new Exception("不支持的数据库类型！");
+				throw e;
+			}
+			
+			
+			//参数
+			YSqlParameters ps = new YSqlParameters();
+			ps.addParameter(1, id);
+			
+			//执行语句。
+			YDataTable table = db.executeSqlReturnData(sql, ps);
+			
+			if(null != table)
+			{
+				if(table.rowCount() > 0)
+				{
+					menu = new MenuInfo();
+					
+					//构建菜单。
+					if(null != table.getData(0,"ID"))
+					{
+						menu.setId((Integer)table.getData(0,"ID"));
+					}
+					
+					if(null != table.getData(0,"NAME"))
+					{
+						menu.setName((String)table.getData(0,"NAME"));
+					}
+					
+					if(null != table.getData(0,"URL"))
+					{
+						menu.setURL((String)table.getData(0,"URL"));
+					}
+					
+					if(null != table.getData(0,"PARENTID"))
+					{
+						menu.setParentId((Integer)table.getData(0,"PARENTID"));
+					}
+					
+					if(null != table.getData(0,"ICON"))
+					{
+						menu.setIcon((String)table.getData(0,"ICON"));
+					}
+					
+					if(null != table.getData(0,"DESKTOPICON"))
+					{
+						menu.setDesktopIcon((String)table.getData(0,"DESKTOPICON"));
+					}
+					
+					if(null != table.getData(0,"ORDER"))
+					{
+						menu.setOrder((Integer)table.getData(0,"ORDER"));
+					}
+				}
+				else
+				{
+					Exception e = new Exception("未找到指定数据！");
+					throw e;
+				}
+			}
+			else
+			{
+				Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+				throw e;
+			}
+        }
+        catch(Exception ex)
+        {
+        	this.lastErrorMessage = ex.getMessage();
+        }
+		
+		return menu;
+	}
+	
+	/**
+	 * 创建菜单。
+	 * 
+	 * @param menu 菜单信息。
+	 * @return 成功返回创建的菜单id，失败返回-1。
+	 */
+	public int createMenu(MenuInfo menu)
+	{
+		int retValue = -1;
+		
+		try
+		{
+			if(this.menuDatabase.connectDataBase())
+			{
+				retValue = this.createMenu(menu,this.menuDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.menuDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.menuDatabase.disconnectDataBase();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 创建菜单。
+	 * 
+	 * @param menu 菜单信息。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回创建的菜单id，失败返回-1。
+	 */
+	public int createMenu(MenuInfo menu,YDataBase db)
+	{
+		int retValue = -1;
+		
+		try
+        {
+			if (menu == null)
+            {
+				Exception e = new Exception("不能插入空菜单！");
+				throw e;
+            }
+            else if (null == menu.getName() || menu.getName().length() > 20)
+            {
+                Exception e = new Exception("菜单名称不合法，长度1～20！");
+				throw e;
+            }
+            else if (menu.getURL().length() > 200)
+            {
+            	Exception e = new Exception("菜单URL不合法，长度1～200！");
+				throw e;
+            }
+            else if (menu.getIcon().length() > 20)
+            {
+            	Exception e = new Exception("菜单图标不合法！");
+				throw e;
+            }
+            else if (menu.getDesktopIcon().length() > 100)
+            {
+            	Exception e = new Exception("菜单桌面图标不合法！");
+				throw e;
+            }
+            else
+            {
+	        	//构建SQL语句
+				String sql = "";
+				//参数
+				YSqlParameters ps = new YSqlParameters();
+				
+				if(menu.getParentId() == -1)
+				{
+					//顶级菜单
+					if(YDataBaseType.MSSQL == db.getDatabaseType())
+					{
+						sql = "INSERT INTO SYS_MENUS (NAME,ICON,[ORDER]) VALUES (?,?,?)";
+						ps.addParameter(1, menu.getName());
+						ps.addParameter(2, menu.getIcon());
+						ps.addParameter(3, menu.getOrder());
+					}
+					else
+					{
+						Exception e = new Exception("不支持的数据库类型！");
+						throw e;
+					}
+				}
+				else
+				{
+					//子菜单
+					if(YDataBaseType.MSSQL == db.getDatabaseType())
+					{
+						sql = "INSERT INTO SYS_MENUS (NAME,URL,PARENTID,ICON,DESKTOPICON,[ORDER]) VALUES (？,？,？,？,？,？)";
+						ps.addParameter(1, menu.getName());
+						ps.addParameter(2, menu.getURL());
+						ps.addParameter(3, menu.getIcon());
+						ps.addParameter(4, menu.getDesktopIcon());
+						ps.addParameter(5, menu.getOrder());
+					}
+					else
+					{
+						Exception e = new Exception("不支持的数据库类型！");
+						throw e;
+					}
+				}
+				
+				//执行语句。
+				int rowCount = db.executeSqlWithOutData(sql, ps);
+				if(rowCount > 0)
+				{
+					//获取id
+					YDataTable table = db.executeSqlReturnData("SELECT @@IDENTITY AS ID");
+					
+					if(null != table && table.rowCount() > 0)
+					{
+						if(null != table.getData(0,"ID"))
+						{
+							double d = (Double)table.getData(0,"ID");
+							retValue = (int) d;
+						}
+					}
+					else
+					{
+						Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+						throw e;
+					}
+				}
+				else
+				{
+					Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+					throw e;
+				}
+            }
+        }
+        catch(Exception ex)
+        {
+        	this.lastErrorMessage = ex.getMessage();
+        }
+		
+		return retValue;
+	}
 }

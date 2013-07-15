@@ -55,5 +55,21 @@
 			<!-- 使用此拦截器 -->  
             <interceptor-ref name="mainInterceptor" />
 		</action>
+		
+		<!-- 获取菜单信息 -->
+		<action name="menuQuery" class="ylr.actions.background.sys.menu.MenuQueryAction">
+			<result name="success">/background/sys/menu/menu_edit.jsp</result>
+			
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
+		
+		<!-- 保存菜单 -->
+		<action name="menuSave" class="ylr.actions.background.sys.menu.MenuSaveAction">
+			<result name="error">/background/sys/menu/menu_edit.jsp</result>
+			
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
 	</package>
 </struts>

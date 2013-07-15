@@ -42,13 +42,13 @@
 		/*!
          * \brief
          * 新增分组。
-         * 作者：董帅 创建时间：2012-8-13 17:20:49
+         * 作者：董帅 创建时间：2013-07-15 14:27:10
          */
         function addGroup()
         {
-            window.parent.popupsWindow("#popups", "新增菜单分组", 700, 230, "sys/menu/menu_edit.aspx?pageType=group", "icon-add", true, true);
+            window.parent.popupsWindow("#popups", "新增菜单分组", 700, 230, "<%=basePath%>/background/sys/menu/menuQuery", "icon-add", true, true);
         }
-
+		
         /*!
          * \brief
          * 修改分组。
@@ -135,9 +135,9 @@
 		
 		$(document).ready(function ()
         {
-            var errorMessage = "<s:property value="returnMessage" />";
+            var returnMessage = "<s:property value="returnMessage" />";
             
-            if("" != errorMessage)
+            if("" != returnMessage)
             {
             	window.parent.$.messager.alert("提示",returnMessage,"info");
             }
