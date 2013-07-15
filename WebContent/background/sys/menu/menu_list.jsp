@@ -93,7 +93,7 @@
          */
         function addMenu()
         {
-            window.parent.popupsWindow("#popups", "新增菜单", 700, 230, "sys/menu/menu_edit.aspx?pageType=item&parentId=" + $("#selectGroupId").val(), "icon-add", true, true);
+            window.parent.popupsWindow("#popups", "新增菜单", 700, 230, "<%=basePath%>/background/sys/menu/menuQuery.action?parentId=<s:property value="topMenuId"/>", "icon-add", true, true);
         }
 
         /*!

@@ -647,12 +647,13 @@ public class MenuDataBase
 					//子菜单
 					if(YDataBaseType.MSSQL == db.getDatabaseType())
 					{
-						sql = "INSERT INTO SYS_MENUS (NAME,URL,PARENTID,ICON,DESKTOPICON,[ORDER]) VALUES (？,？,？,？,？,？)";
+						sql = "INSERT INTO SYS_MENUS (NAME,URL,PARENTID,ICON,DESKTOPICON,[ORDER]) VALUES (?,?,?,?,?,?)";
 						ps.addParameter(1, menu.getName());
 						ps.addParameter(2, menu.getURL());
-						ps.addParameter(3, menu.getIcon());
-						ps.addParameter(4, menu.getDesktopIcon());
-						ps.addParameter(5, menu.getOrder());
+						ps.addParameter(3, menu.getParentId());
+						ps.addParameter(4, menu.getIcon());
+						ps.addParameter(5, menu.getDesktopIcon());
+						ps.addParameter(6, menu.getOrder());
 					}
 					else
 					{
