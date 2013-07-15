@@ -153,7 +153,7 @@
 		<table class="editTable" style="width:100%;">
 		<s:iterator value="topMenus" id="menu">
 			<tr>
-			<td style="width:30px;text-align:center;"><input type="checkbox" name="chkGroup"></td>
+			<td style="width:30px;text-align:center;"><input type="checkbox" name="chkGroup" value="<s:property value="#menu.id"/>"></td>
 			<td>
 			<a href="#" class="easyui-linkbutton" data-options="iconCls:'<s:property value="#menu.icon"/>',plain:true" style="width:200px" onclick="javascript:showMenus(<s:property value="#menu.id"/>)"><s:property value="#menu.name"/></a>
 			</td>
@@ -174,7 +174,7 @@
 			</tr>
 		<s:iterator value="childMenus" id="menu">
 			<tr>
-			<td style="text-align:center;"><input type="checkbox" name=""></td>
+			<td style="text-align:center;"><input type="checkbox" name="chkItem" value="value="<s:property value="#menu.id"/>" /></td>
 			<td><s:property value="#menu.name"/></td>
 			<td style="text-align:center;"><s:property value="#menu.icon"/></td>
 			<td style="text-align:center;"><s:property value="#menu.desktopIcon"/></td>

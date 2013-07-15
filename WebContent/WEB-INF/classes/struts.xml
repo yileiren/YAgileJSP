@@ -66,6 +66,7 @@
 		
 		<!-- 保存菜单 -->
 		<action name="menuSave" class="ylr.actions.background.sys.menu.MenuSaveAction">
+		    <result name="success">/background/message/closePopWindow.jsp</result>
 			<result name="error">/background/sys/menu/menu_edit.jsp</result>
 			
 			<!-- 使用此拦截器 -->  

@@ -1,5 +1,9 @@
 package ylr.actions.background.sys.menu;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts2.ServletActionContext;
+
 import ylr.actions.background.sys.SystemConfig;
 import ylr.database.system.menu.MenuDataBase;
 import ylr.database.system.menu.MenuInfo;
@@ -55,6 +59,11 @@ public class MenuSaveAction extends ActionSupport
 	 * 返回消息。
 	 */
 	private String returnMessage = "";
+	
+	/**
+	 * 主界面跳转地址。
+	 */
+	private String centerIframeURL = "";
 
 	public String execute()
 	{
@@ -124,9 +133,24 @@ public class MenuSaveAction extends ActionSupport
 				int retId = db.createMenu(menu);
 				if(retId >= 0)
 				{
-					//retValue = SUCCESS;
-					
+					retValue = SUCCESS;
 					this.returnMessage = "新增数据成功！";
+					
+					//设置跳转地址
+					HttpServletRequest request = ServletActionContext.getRequest();
+					this.centerIframeURL = request.getScheme() 
+							+ "://" + request.getServerName() 
+							+ ":" + request.getServerPort() 
+							+request.getContextPath() 
+							+ "/background/sys/menu/menuList.action?topMenuId=";
+					if(this.parentId == -1)
+					{
+						this.centerIframeURL += String.valueOf(retId);
+					}
+					else
+					{
+						this.centerIframeURL += String.valueOf(this.parentId);
+					}
 				}
 				else
 				{
@@ -220,5 +244,15 @@ public class MenuSaveAction extends ActionSupport
 	public void setReturnMessage(String returnMessage)
 	{
 		this.returnMessage = returnMessage;
+	}
+
+	public String getCenterIframeURL()
+	{
+		return centerIframeURL;
+	}
+
+	public void setCenterIframeURL(String centerIframeURL)
+	{
+		this.centerIframeURL = centerIframeURL;
 	}
 }

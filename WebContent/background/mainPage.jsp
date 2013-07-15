@@ -65,6 +65,12 @@
 	        //显示页面
 	        $("#centerIframe").attr("src", url);
 	    }
+	    
+	    function refreshCenterUrl(url)
+	    {
+	    	//显示页面
+	        $("#centerIframe").attr("src", url);
+	    }
     
         $(document).ready(function ()
         {
