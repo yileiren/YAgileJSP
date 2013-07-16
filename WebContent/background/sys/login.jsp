@@ -55,6 +55,21 @@
 
         $(document).ready(function ()
         {
+			var errorMessage = "<s:property value="#request.interceptorErrorMessage"/>" + "<s:property value="errorMessage" />";
+            
+            if("" != errorMessage)
+            {
+            	if (window.top.location != window.self.location)
+                {
+            		$.messager.alert("提示",errorMessage,"info");
+                    window.top.location = "<%=basePath%>/background/sys/login.jsp";
+                }
+            	else
+            	{
+            		$.messager.alert("提示",errorMessage,"info");
+            	}
+            }
+            
             if (window.top.location != window.self.location)
             {
                 window.top.location = "<%=basePath%>/background/sys/login.jsp";
@@ -75,13 +90,6 @@
                 	$("#butLogin").click();
                 }
             });
-            
-            var errorMessage = "<s:property value="#request.interceptorErrorMessage"/>" + "<s:property value="errorMessage" />";
-            
-            if("" != errorMessage)
-            {
-            	$.messager.alert("提示",errorMessage,"info");
-            }
         });
     //-->
     </script>

@@ -840,4 +840,237 @@ public class MenuDataBase
 		
 		return retValue;
 	}
+	
+	/**
+	 * 创建关联页面。
+	 * 
+	 * @param page 页面信息。
+	 * 
+	 * @return 成功返回页面id，否则返回-1.
+	 */
+	public int createPage(PageInfo page)
+	{
+		int retValue = -1;
+		
+		try
+		{
+			if(this.menuDatabase.connectDataBase())
+			{
+				retValue = this.createPage(page,this.menuDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.menuDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.menuDatabase.disconnectDataBase();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 创建关联页面。
+	 * 
+	 * @param page 页面信息。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回页面id，否则返回-1.
+	 */
+	public int createPage(PageInfo page,YDataBase db)
+	{
+		int retValue = -1;
+		
+		try
+        {
+			if (page == null)
+            {
+				Exception e = new Exception("不能插入空页面！");
+				throw e;
+            }
+            else if (null == page.getPath() || page.getPath().length() > 500)
+            {
+                Exception e = new Exception("页面路径长度应该在1～500！");
+				throw e;
+            }
+            else if (page.getDetail().length() > 200)
+            {
+            	Exception e = new Exception("页面说明不合法，长度1～200！");
+				throw e;
+            }
+            else
+            {
+	        	//构建SQL语句
+				String sql = "";
+				//参数
+				YSqlParameters ps = new YSqlParameters();
+				
+				//顶级菜单
+				if(YDataBaseType.MSSQL == db.getDatabaseType())
+				{
+					sql = "INSERT INTO SYS_MENU_PAGE (DETAIL,PATH,MENUID) VALUES (?,?,?)";
+					ps.addParameter(1, page.getDetail());
+					ps.addParameter(2, page.getPath());
+					ps.addParameter(3, page.getMenuId());
+				}
+				else
+				{
+					Exception e = new Exception("不支持的数据库类型！");
+					throw e;
+				}
+				
+				//执行语句。
+				int rowCount = db.executeSqlWithOutData(sql, ps);
+				if(rowCount > 0)
+				{
+					//获取id
+					YDataTable table = db.executeSqlReturnData("SELECT @@IDENTITY AS ID");
+					
+					if(null != table && table.rowCount() > 0)
+					{
+						if(null != table.getData(0,"ID"))
+						{
+							double d = (Double)table.getData(0,"ID");
+							retValue = (int) d;
+						}
+					}
+					else
+					{
+						Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+						throw e;
+					}
+				}
+				else
+				{
+					Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+					throw e;
+				}
+            }
+        }
+        catch(Exception ex)
+        {
+        	this.lastErrorMessage = ex.getMessage();
+        }
+		
+		return retValue;
+	}
+	
+	/**
+	 * 获取指定菜单的关联页面。
+	 * 
+	 * @param menuId 菜单id。
+	 *  
+	 * @return 成功返回页面列表，否则返回null。
+	 */
+	public List<PageInfo> getPagesByMenuId(int menuId)
+	{
+		List<PageInfo> pages = null;
+		
+		try
+		{
+			if(this.menuDatabase.connectDataBase())
+			{
+				pages = this.getPagesByMenuId(menuId,this.menuDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.menuDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.menuDatabase.disconnectDataBase();
+		}
+		
+		return pages;
+	}
+	
+	/**
+	 * 获取指定菜单的关联页面。
+	 * 
+	 * @param menuId 菜单id。 
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回页面列表，否则返回null。
+	 */
+	public List<PageInfo> getPagesByMenuId(int menuId,YDataBase db)
+	{
+		List<PageInfo> pages = null;
+		
+		try
+        {
+        	//构建SQL语句
+			String sql = "";
+			if(YDataBaseType.MSSQL == db.getDatabaseType())
+			{
+				sql = "SELECT * FROM SYS_MENU_PAGE WHERE MENUID = ?";
+			}
+			else
+			{
+				Exception e = new Exception("不支持的数据库类型！");
+				throw e;
+			}
+			
+			//参数
+			YSqlParameters ps = new YSqlParameters();
+			ps.addParameter(1, menuId);
+			
+			//执行SQL语句
+			YDataTable table = db.executeSqlReturnData(sql, ps);
+			
+			if(null != table)
+			{
+				pages = new ArrayList<PageInfo>();
+				
+				//构建菜单。
+				for(int i = 0;i < table.rowCount();i++)
+				{
+					//顶级菜单
+					PageInfo page = new PageInfo();
+					if(null != table.getData(i,"ID"))
+					{
+						page.setId((Integer)table.getData(i,"ID"));
+					}
+					
+					if(null != table.getData(i,"PATH"))
+					{
+						page.setPath((String)table.getData(i,"PATH"));
+					}
+					
+					if(null != table.getData(i,"DETAIL"))
+					{
+						page.setDetail((String)table.getData(i,"DETAIL"));
+					}
+					
+					if(null != table.getData(i,"MENUID"))
+					{
+						page.setMenuId((Integer)table.getData(i,"MENUID"));
+					}
+						
+					pages.add(page);
+				}
+			}
+			else
+			{
+				Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+				throw e;
+			}
+        }
+        catch(Exception ex)
+        {
+        	this.lastErrorMessage = ex.getMessage();
+        }
+		
+		return pages;
+	}
 }
