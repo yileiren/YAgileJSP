@@ -1294,4 +1294,97 @@ public class MenuDataBase
 		
 		return retValue;
 	}
+	
+	/**
+	 * 删除页面。
+	 * 
+	 * @param ids 页面id数组。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean deleteMenus(int[] ids)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			if(this.menuDatabase.connectDataBase())
+			{
+				retValue = this.deleteMenus(ids,this.menuDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.menuDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.menuDatabase.disconnectDataBase();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 删除页面。
+	 * 
+	 * @param ids 页面id数组。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean deleteMenus(int[] ids,YDataBase db)
+	{
+		boolean retValue = false;
+		
+		try
+        {
+			if (ids == null || ids.length == 0)
+            {
+				Exception e = new Exception("未指定要删除的页面！");
+				throw e;
+            }
+            else
+            {
+	        	//构建SQL语句
+				String sql = "";
+				
+				if(YDataBaseType.MSSQL == db.getDatabaseType())
+				{
+					sql = "DELETE FROM SYS_MENU_PAGE WHERE ID IN (" + String.valueOf(ids[0]);
+					for(int i = 1;i < ids.length;i++)
+					{
+						sql += "," + String.valueOf(ids[i]);
+					}
+					sql += ")";
+				}
+				else
+				{
+					Exception e = new Exception("不支持的数据库类型！");
+					throw e;
+				}
+				
+				//执行语句。
+				int rowCount = db.executeSqlWithOutData(sql);
+				if(rowCount >= 0)
+				{
+					retValue = true;
+				}
+				else
+				{
+					Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+					throw e;
+				}
+            }
+        }
+        catch(Exception ex)
+        {
+        	this.lastErrorMessage = ex.getMessage();
+        }
+		
+		return retValue;
+	}
 }

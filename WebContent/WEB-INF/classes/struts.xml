@@ -107,5 +107,15 @@
 			<!-- 使用此拦截器 -->  
             <interceptor-ref name="mainInterceptor" />
 		</action>
+		
+		<!-- 删除关联页面 -->
+		<action name="menuPageDelete" class="ylr.actions.background.sys.menu.PageDeleteAction">
+			<result name="none" type="chain">
+				<param name="actionName">menuPageList</param>
+				<param name="namespace">/background</param>
+			</result>
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
 	</package>
 </struts>

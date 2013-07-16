@@ -41,14 +41,22 @@ public class PageQueryAction extends ActionSupport
 		try
 		{
 			MenuDataBase db = MenuDataBase.createMenuDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
-			if(this.pageId != -1)
+			if(null != db)
 			{
-				page = db.getPage(this.pageId);
-				if(null == page)
+				if(this.pageId != -1)
 				{
-					Exception e = new Exception("获取数据出错！" + db.getLastErrorMessage());
-					throw e;
+					page = db.getPage(this.pageId);
+					if(null == page)
+					{
+						Exception e = new Exception("获取数据出错！" + db.getLastErrorMessage());
+						throw e;
+					}
 				}
+			}
+			else
+			{
+				Exception e = new Exception("创建数据库访问对象失败！");
+				throw e;
 			}
 		}
 		catch(Exception ex)

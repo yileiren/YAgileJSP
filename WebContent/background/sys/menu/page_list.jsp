@@ -44,6 +44,31 @@
 	        window.location.href='<%=basePath%>/background/sys/menu/menuPageQuery.action?menuId=<s:property value="menuId" />&pageId=' + $("input:checked[type='checkbox'][name='chkPage']").eq(0).val();
 	    }
 		
+	   /*!
+        * \brief
+        * 删除页面。
+        * 作者：董帅 创建时间：2013-07-17 00:02:31
+        */
+        function deletePages()
+        {
+            //判断选中
+            if ($("input:checked[type='checkbox'][name='chkPage']").length > 0)
+            {
+            	window.parent.$.messager.confirm("提示", "确认要删除选中的页面？", function(r){
+    				if (r)
+    				{
+    					$("#menuPagesForm").attr("action","<%=basePath%>/background/sys/menu/menuPageDelete.action?menuId=<s:property value="menuId" />");
+    					$("#menuPagesForm").submit();
+    				}
+    			});
+            }
+            else
+            {
+                window.parent.$.messager.alert("提示","请选中要删除的字典！","info");
+                return false;
+            }
+        }
+		
 		$(document).ready(function ()
         {
             var message = "<s:property value="message" />";
@@ -65,6 +90,7 @@
     </div>
             
 	<div id="center" data-options="region:'center'" style="padding:3px;background-color:#EEF5FD">
+	<form id="menuPagesForm" method="post">
 		<table class="listTable" style="width:100%">
 	        <tr class="tableHead"">
 	            <th style="width:30px">选择</th>
@@ -79,6 +105,7 @@
             </tr>
             </s:iterator>
         </table>
+    </form>
 	</div>
 </body>
 </html>

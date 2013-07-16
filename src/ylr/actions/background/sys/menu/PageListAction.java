@@ -23,11 +23,20 @@ public class PageListAction extends ActionSupport
 		try
 		{
 			MenuDataBase db = MenuDataBase.createMenuDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
-			pages = db.getPagesByMenuId(menuId);
 			
-			if(null == pages)
+			if(null != db)
 			{
-				Exception e = new Exception("获取数据失败！" + db.getLastErrorMessage());
+				pages = db.getPagesByMenuId(menuId);
+				
+				if(null == pages)
+				{
+					Exception e = new Exception("获取数据失败！" + db.getLastErrorMessage());
+					throw e;
+				}
+			}
+			else
+			{
+				Exception e = new Exception("创建数据库访问对象失败！");
 				throw e;
 			}
 		}

@@ -60,37 +60,46 @@ public class PageSaveAction extends ActionSupport
 	        {
 	        	this.page.setMenuId(this.menuId);
 	        	MenuDataBase db = MenuDataBase.createMenuDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
-	        	if(-1 == this.pageId)
+	        	
+	        	if(null != db)
 	        	{
-	        		//新增
-	        		int id = db.createPage(this.page);
-	        		if(id > 0)
-	        		{
-	        			this.message = "";
-	        			retValue = SUCCESS;
-	        		}
-	        		else
-	        		{
-	        			Exception e = new Exception("新增数据出错！" + db.getLastErrorMessage());
-	    				throw e;
-	        		}
+		        	if(-1 == this.pageId)
+		        	{
+		        		//新增
+		        		int id = db.createPage(this.page);
+		        		if(id > 0)
+		        		{
+		        			this.message = "";
+		        			retValue = SUCCESS;
+		        		}
+		        		else
+		        		{
+		        			Exception e = new Exception("新增数据出错！" + db.getLastErrorMessage());
+		    				throw e;
+		        		}
+		        	}
+		        	else
+		        	{
+		        		//修改
+		        		this.page.setId(this.pageId);
+		        		this.page.setMenuId(this.menuId);
+		        		if(db.changePage(this.page))
+		        		{
+		        			this.message = "";
+		        			retValue = SUCCESS;
+		        		}
+		        		else
+		        		{
+		        			Exception e = new Exception("修改数据出错！" + db.getLastErrorMessage());
+		    				throw e;
+		        		}
+		        	}
 	        	}
-	        	else
-	        	{
-	        		//修改
-	        		this.page.setId(this.pageId);
-	        		this.page.setMenuId(this.menuId);
-	        		if(db.changePage(this.page))
-	        		{
-	        			this.message = "";
-	        			retValue = SUCCESS;
-	        		}
-	        		else
-	        		{
-	        			Exception e = new Exception("修改数据出错！" + db.getLastErrorMessage());
-	    				throw e;
-	        		}
-	        	}
+				else
+				{
+					Exception e = new Exception("创建数据库访问对象失败！");
+					throw e;
+				}
 	        }
 		}
 		catch(Exception ex)
