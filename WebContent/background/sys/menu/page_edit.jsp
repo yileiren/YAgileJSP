@@ -73,14 +73,14 @@
 		<input type="hidden" id="pageId" name="pageId" value="<s:property value="pageId" />" />
 		<input type="hidden" id="menuId" name="menuId" value="<s:property value="menuId" />" />
 		<table class="editTable" style="width:100%;">
-            <tr><th style="width:120px">路径：</td><td><input type="input" id="pagePath" name="page.path" value="<s:property value="#page.path" />" class="easyui-validatebox" data-options="required:true" maxlength="500" style="width:300px" /></td></tr>
-            <tr><th style="width:120px">说明：</td><td><input type="input" id="pageDetail" name="page.detail" value="<s:property value="#page.detail" />" maxlength="200" style="width:300px" /></td></tr>
+            <tr><th style="width:120px">路径：</td><td><input type="input" id="pagePath" name="page.path" value="<s:property value="page.path" />" class="easyui-validatebox" data-options="required:true" maxlength="500" style="width:300px" /></td></tr>
+            <tr><th style="width:120px">说明：</td><td><input type="input" id="pageDetail" name="page.detail" value="<s:property value="page.detail" />" maxlength="200" style="width:300px" /></td></tr>
         </table>
     </form>
 	</div>
 	<div data-options="region:'south',border:true" style="height:35px;background:#D9E5FD;padding:3px;text-align:right;">
 		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="javascript:savePage();" >保存</a>
-        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="javascript:closeParentPopupsWindow('#popups')">取消</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="javascript:window.location.href='<%=basePath%>/background/sys/menu/menuPageList.action?menuId=<s:property value="menuId"/>'">取消</a>
 	</div>
 </body>
 </html>

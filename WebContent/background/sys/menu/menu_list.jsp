@@ -155,9 +155,9 @@
 	<div class="easyui-panel" data-options="title:'菜单分组',fit:true,tools:'#groutsButtons'" style="overflow-x:hidden;background-color:#FFFFFF">
 		<form id="topMenuForm" method="post">
 		<input type="hidden" id="topMenuId" name="topMenuId" value="<s:property value="topMenuId"/>" />
-		<table class="editTable" style="width:100%;">
+		<table class="listTable" style="width:100%;">
 		<s:iterator value="topMenus" id="menu">
-			<tr>
+			<tr  class="tableBody1">
 			<td style="width:30px;text-align:center;"><input type="checkbox" name="chkGroup" value="<s:property value="#menu.id"/>"></td>
 			<td>
 			<a href="#" class="easyui-linkbutton" data-options="iconCls:'<s:property value="#menu.icon"/>',plain:true" style="width:200px" onclick="javascript:showMenus(<s:property value="#menu.id"/>)"><s:property value="#menu.name"/></a>
@@ -169,14 +169,14 @@
 	</div>
 	</div>
 	<div id="center" data-options="region:'center',title:'<s:property value="topMenuName"/>',iconCls:'<s:property value="topMenuIcon"/>',tools:'#menusButtons'" style="padding:3px;background-color:#EEF5FD">
-		<table class="editTable" style="width:100%;">
+		<table class="listTable" style="width:100%;">
 			<tr class="tableHead">
-			<th style="width:30px;text-align:center;">选择</th>
-			<th style="text-align:center;">名称</th>
-			<th style="width:100px;text-align:center;">图标</th>
-			<th style="width:100px;text-align:center;">桌面图标</th>
-			<th style="width:30px;text-align:center;">序号</th>
-			<th style="width:120px;text-align:center;">关联页面</th>
+			<th style="width:30px;">选择</th>
+			<th>名称</th>
+			<th style="width:100px;">图标</th>
+			<th style="width:100px;">桌面图标</th>
+			<th style="width:30px;">序号</th>
+			<th style="width:120px;">关联页面</th>
 			</tr>
 		<s:iterator value="childMenus" id="menu">
 			<tr class="tableBody1">

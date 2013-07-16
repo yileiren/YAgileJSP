@@ -8,6 +8,7 @@ table.listTable tr.tableHead{
 }
 
 table.listTable tr.tableHead th{
+	text-align:center;
     color: #0066CC;
     background-color:#AEDEF2;
     font-size:12px;

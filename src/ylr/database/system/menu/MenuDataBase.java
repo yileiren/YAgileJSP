@@ -1073,4 +1073,225 @@ public class MenuDataBase
 		
 		return pages;
 	}
+	
+	/**
+	 * 获取关联页面信息。
+	 * 
+	 * @param id 页面id。
+	 * @return 成功返回页面信息，否则返回null。
+	 */
+	public PageInfo getPage(int id)
+	{
+		PageInfo page = null;
+		
+		try
+		{
+			if(this.menuDatabase.connectDataBase())
+			{
+				page = this.getPage(id,this.menuDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.menuDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.menuDatabase.disconnectDataBase();
+		}
+		
+		return page;
+	}
+	
+	/**
+	 * 获取关联页面信息。
+	 * 
+	 * @param id 页面id。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回页面信息，否则返回null。
+	 */
+	public PageInfo getPage(int id,YDataBase db)
+	{
+		PageInfo page = null;
+		
+		try
+        {
+        	//构建SQL语句
+			String sql = "";
+			if(YDataBaseType.MSSQL == db.getDatabaseType())
+			{
+				sql = "SELECT * FROM SYS_MENU_PAGE WHERE id = ?";
+			}
+			else
+			{
+				Exception e = new Exception("不支持的数据库类型！");
+				throw e;
+			}
+			
+			
+			//参数
+			YSqlParameters ps = new YSqlParameters();
+			ps.addParameter(1, id);
+			
+			//执行语句。
+			YDataTable table = db.executeSqlReturnData(sql, ps);
+			
+			if(null != table)
+			{
+				if(table.rowCount() > 0)
+				{
+					page = new PageInfo();
+					
+					if(null != table.getData(0,"ID"))
+					{
+						page.setId((Integer)table.getData(0,"ID"));
+					}
+					
+					if(null != table.getData(0,"PATH"))
+					{
+						page.setPath((String)table.getData(0,"PATH"));
+					}
+					
+					if(null != table.getData(0,"DETAIL"))
+					{
+						page.setDetail((String)table.getData(0,"DETAIL"));
+					}
+					
+					if(null != table.getData(0,"MENUID"))
+					{
+						page.setMenuId((Integer)table.getData(0,"MENUID"));
+					}
+				}
+				else
+				{
+					Exception e = new Exception("未找到指定数据！");
+					throw e;
+				}
+			}
+			else
+			{
+				Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+				throw e;
+			}
+        }
+        catch(Exception ex)
+        {
+        	this.lastErrorMessage = ex.getMessage();
+        }
+		
+		return page;
+	}
+	
+	/**
+	 * 修改页面信息。
+	 * 
+	 * @param page 页面信息。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean changePage(PageInfo page)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			if(this.menuDatabase.connectDataBase())
+			{
+				retValue = this.changePage(page,this.menuDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.menuDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.menuDatabase.disconnectDataBase();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 修改页面信息。
+	 * 
+	 * @param page 页面信息。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean changePage(PageInfo page,YDataBase db)
+	{
+		boolean retValue = false;
+		
+		try
+        {
+			if (page == null)
+            {
+				Exception e = new Exception("不能插入空页面！");
+				throw e;
+            }
+			else if(page.getId() < 0)
+			{
+				Exception e = new Exception("id不合法，不能小于0！");
+				throw e;
+			}
+			else if (null == page.getPath() || page.getPath().length() > 500)
+            {
+                Exception e = new Exception("页面路径长度应该在1～500！");
+				throw e;
+            }
+            else if (page.getDetail().length() > 200)
+            {
+            	Exception e = new Exception("页面说明不合法，长度1～200！");
+				throw e;
+            }
+            else
+            {
+	        	//构建SQL语句
+				String sql = "";
+				//参数
+				YSqlParameters ps = new YSqlParameters();
+				ps.addParameter(1, page.getDetail());
+				ps.addParameter(2, page.getPath());
+				ps.addParameter(3, page.getId());
+				
+				if(YDataBaseType.MSSQL == db.getDatabaseType())
+				{
+					sql = "UPDATE SYS_MENU_PAGE SET DETAIL = ?,PATH = ? WHERE ID = ?";
+				}
+				else
+				{
+					Exception e = new Exception("不支持的数据库类型！");
+					throw e;
+				}
+				
+				//执行语句。
+				int rowCount = db.executeSqlWithOutData(sql, ps);
+				if(rowCount > 0)
+				{
+					retValue = true;
+				}
+				else
+				{
+					Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+					throw e;
+				}
+            }
+        }
+        catch(Exception ex)
+        {
+        	this.lastErrorMessage = ex.getMessage();
+        }
+		
+		return retValue;
+	}
 }

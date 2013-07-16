@@ -1,5 +1,7 @@
 package ylr.actions.background.sys.menu;
 
+import ylr.actions.background.sys.SystemConfig;
+import ylr.database.system.menu.MenuDataBase;
 import ylr.database.system.menu.PageInfo;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -36,6 +38,24 @@ public class PageQueryAction extends ActionSupport
 
 	public String execute()
 	{
+		try
+		{
+			MenuDataBase db = MenuDataBase.createMenuDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
+			if(this.pageId != -1)
+			{
+				page = db.getPage(this.pageId);
+				if(null == page)
+				{
+					Exception e = new Exception("获取数据出错！" + db.getLastErrorMessage());
+					throw e;
+				}
+			}
+		}
+		catch(Exception ex)
+		{
+			this.message = ex.getMessage();
+		}
+		
 		return NONE;
 	}
 

@@ -26,6 +26,24 @@
 	<script type="text/javascript" src="<%=basePath%>/js/YWindows.js"></script>
 	
 	<script type="text/javascript">
+		/*!
+	     * \brief
+	     * 修改页面。
+	     * 作者：董帅 创建时间：2013-07-16 23:29:27
+	     */
+	    function editPage()
+	    {
+	        //判断选中
+	        if ($("input:checked[type='checkbox'][name='chkPage']").length != 1)
+	        {
+	        	window.parent.$.messager.alert("提示","请选中要编辑的页面，一次只能选择一个！","info");
+	            return;
+	        }
+	
+	        //打开编辑页面
+	        window.location.href='<%=basePath%>/background/sys/menu/menuPageQuery.action?menuId=<s:property value="menuId" />&pageId=' + $("input:checked[type='checkbox'][name='chkPage']").eq(0).val();
+	    }
+		
 		$(document).ready(function ()
         {
             var message = "<s:property value="message" />";
