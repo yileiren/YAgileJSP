@@ -52,7 +52,7 @@
         /*!
          * \brief
          * 修改分组。
-         * 作者：董帅 创建时间：2012-8-14 11:35:05
+         * 作者：董帅 创建时间：2013-07-16 13:18:05
          */
         function editGroup()
         {
@@ -70,26 +70,31 @@
         /*!
          * \brief
          * 删除选中的分组。
-         * 作者：董帅 创建时间：2012-8-14 14:19:19
+         * 作者：董帅 创建时间：2013-07-16 13:18:00
          */
         function deleteGroups()
         {
             //判断选中
             if ($("input:checked[type='checkbox'][name='chkGroup']").length > 0)
             {
-                return confirm("确认要删除选中的分组？删除分组将连同子菜单一并删除，并且无法恢复！");
+            	window.parent.$.messager.confirm("提示", "确认要删除选中的分组？删除分组将连同子菜单一并删除，并且无法恢复！", function(r){
+    				if (r)
+    				{
+    					$("#topMenuForm").attr("action","<%=basePath%>/background/sys/menu/menuDelete.action?type=group");
+    					$("#topMenuForm").submit();
+    				}
+    			});
             }
             else
             {
-                alert("请选中要删除的分组！");
-                return false;
+            	window.parent.$.messager.alert("提示","请选中要删除的分组！","info");
             }
         }
 
         /*!
          * \brief
          * 新增菜单。
-         * 作者：董帅 创建时间：2012-8-14 21:34:51
+         * 作者：董帅 创建时间：2013-07-16 13:18:11
          */
         function addMenu()
         {
@@ -99,7 +104,7 @@
         /*!
          * \brief
          * 编辑菜单。
-         * 作者：董帅 创建时间：2012-8-14 21:45:54
+         * 作者：董帅 创建时间：2013-07-16 13:18:15
          */
         function editMenu()
         {
@@ -165,20 +170,25 @@
 	</div>
 	<div id="center" data-options="region:'center',title:'<s:property value="topMenuName"/>',iconCls:'<s:property value="topMenuIcon"/>',tools:'#menusButtons'" style="padding:3px;background-color:#EEF5FD">
 		<table class="editTable" style="width:100%;">
-			<tr>
+			<tr class="tableHead">
 			<th style="width:30px;text-align:center;">选择</th>
 			<th style="text-align:center;">名称</th>
 			<th style="width:100px;text-align:center;">图标</th>
 			<th style="width:100px;text-align:center;">桌面图标</th>
 			<th style="width:30px;text-align:center;">序号</th>
+			<th style="width:120px;text-align:center;">关联页面</th>
 			</tr>
 		<s:iterator value="childMenus" id="menu">
-			<tr>
+			<tr class="tableBody1">
 			<td style="text-align:center;"><input type="checkbox" name="chkItem" value="value="<s:property value="#menu.id"/>" /></td>
 			<td><s:property value="#menu.name"/></td>
 			<td style="text-align:center;"><s:property value="#menu.icon"/></td>
 			<td style="text-align:center;"><s:property value="#menu.desktopIcon"/></td>
 			<td style="text-align:center;"><s:property value="#menu.order"/></td>
+			<td style="text-align:center">
+                <a id="butSetPage" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-supplies'" 
+                	onclick="javascript:window.parent.popupsWindow('#popups', '关联页面', 640, 480, '<%=basePath%>/background/sys/menu/menuPageList.action?menuId=<s:property value="#menu.id"/>', 'icon-supplies', true, true);">关联页面</a>
+            </td>
 			</tr>
 		</s:iterator>
 		</table>
@@ -186,12 +196,12 @@
 	<div id="groutsButtons">
 		<a href="#" class="icon-add" onclick="javascript:addGroup();"></a>
 		<a href="#" class="icon-edit" onclick="javascript:editGroup();"></a>
-		<a href="#" class="icon-cancel" onclick="javascript:return deleteGroups();"></a>
+		<a href="#" class="icon-cancel" onclick="javascript:deleteGroups();"></a>
 	</div>
     <div id="menusButtons">
 		<a href="#" class="icon-add" onclick="javascript:addMenu();"></a>
 		<a href="#" class="icon-edit" onclick="javascript:editMenu();"></a>
-		<a href="#" class="icon-cancel" onclick="javascript:return deleteItem();"></a>
+		<a href="#" class="icon-cancel" onclick="javascript:deleteItem();"></a>
 	</div>
 </body>
 </html>

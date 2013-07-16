@@ -72,5 +72,40 @@
 			<!-- 使用此拦截器 -->  
             <interceptor-ref name="mainInterceptor" />
 		</action>
+		
+		<!-- 删除菜单 -->
+		<action name="menuDelete" class="ylr.actions.background.sys.menu.MenuDeleteAction">
+			<result name="success" type="chain">
+				<param name="actionName">menuList</param>
+				<param name="namespace">/background</param>
+			</result>
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
+		
+		<!-- 获取菜单关联页面列表 -->
+		<action name="menuPageList" class="ylr.actions.background.sys.menu.PageListAction">
+			<result name="none">/background/sys/menu/page_list.jsp</result>
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
+		
+		<!-- 获取菜单关联页面信息 -->
+		<action name="menuPageQuery" class="ylr.actions.background.sys.menu.PageQueryAction">
+			<result name="none">/background/sys/menu/page_edit.jsp</result>
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
+		
+		<!-- 保存菜单关联页面信息 -->
+		<action name="menuPageSave" class="ylr.actions.background.sys.menu.PageSaveAction">
+			<result name="success" type="chain">
+				<param name="actionName">menuPageList</param>
+				<param name="namespace">/background</param>
+			</result>
+			<result name="error">/background/sys/menu/page_edit.jsp</result>
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
 	</package>
 </struts>
