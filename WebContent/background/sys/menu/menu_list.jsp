@@ -122,26 +122,30 @@
         /*!
          * \brief
          * 删除菜单。
-         * 作者：董帅 创建时间：2012-8-14 22:10:03
+         * 作者：董帅 创建时间：2013-07-17 22:25:48
          */
         function deleteItem()
         {
             //判断选中
             if ($("input:checked[type='checkbox'][name='chkItem']").length > 0)
             {
-                return confirm("确认要删除选中的菜单？");
+                window.parent.$.messager.confirm("提示", "确认要删除选中的菜单？", function(r){
+     				if (r)
+     				{
+     					$("#itemMenuForm").attr("action","<%=basePath%>/background/sys/menu/menuDelete.action?type=item&topMenuId=<s:property value="topMenuId"/>");
+     					$("#itemMenuForm").submit();
+     				}
+     			});
             }
             else
             {
-                alert("请选中要删除的菜单！");
-                return false;
+                window.parent.$.messager.alert("提示","请选中要删除的菜单！","info");
             }
         }
 		
 		$(document).ready(function ()
         {
             var returnMessage = "<s:property value="returnMessage" />";
-            
             if("" != returnMessage)
             {
             	window.parent.$.messager.alert("提示",returnMessage,"info");
@@ -169,6 +173,7 @@
 	</div>
 	</div>
 	<div id="center" data-options="region:'center',title:'<s:property value="topMenuName"/>',iconCls:'<s:property value="topMenuIcon"/>',tools:'#menusButtons'" style="padding:3px;background-color:#EEF5FD">
+	<form id="itemMenuForm" method="post">
 		<table class="listTable" style="width:100%;">
 			<tr class="tableHead">
 			<th style="width:30px;">选择</th>
@@ -192,6 +197,7 @@
 			</tr>
 		</s:iterator>
 		</table>
+	</form>
 	</div>
 	<div id="groutsButtons">
 		<a href="#" class="icon-add" onclick="javascript:addGroup();"></a>

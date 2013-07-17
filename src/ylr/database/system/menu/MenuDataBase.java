@@ -842,6 +842,184 @@ public class MenuDataBase
 	}
 	
 	/**
+	 * 删除菜单。
+	 * 
+	 * @param ids 要删除的菜单id。
+	 * 
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean deleteMenus(int[] ids)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			if(this.menuDatabase.connectDataBase())
+			{
+				if(this.menuDatabase.beginTransaction())
+				{
+					retValue = this.deleteMenus(ids,this.menuDatabase);
+				}
+				else
+				{
+					Exception e = new Exception("开启事务失败！" + this.menuDatabase.getLastErrorMessage());
+					throw e;
+				}
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.menuDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			//处理事务
+			if(retValue)
+			{
+				this.menuDatabase.commitTransaction();
+			}
+			else
+			{
+				this.menuDatabase.rollbackTransaction();
+			}
+			
+			this.menuDatabase.disconnectDataBase();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 删除菜单。
+	 * 
+	 * @param ids 要删除的菜单id。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean deleteMenus(int[] ids,YDataBase db)
+	{
+		boolean retValue = false;
+		
+		try
+        {
+			if (null == ids || ids.length == 0)
+            {
+				Exception e = new Exception("未指定要删除的菜单！");
+				throw e;
+            }
+            else
+            {
+            	int i = 0;
+            	for(;i < ids.length;i++)
+            	{
+            		if(!this.deleteMenu(ids[i], db))
+            		{
+            			Exception e = new Exception(db.getLastErrorMessage());
+        				throw e;
+            		}
+            	}
+            	
+            	if(i == ids.length)
+            	{
+            		retValue = true;
+            	}
+            	else
+            	{
+            		Exception e = new Exception("删除菜单出错！");
+    				throw e;
+            	}
+            }
+        }
+        catch(Exception ex)
+        {
+        	this.lastErrorMessage = ex.getMessage();
+        }
+		
+		return retValue;
+	}
+	
+	/**
+	 * 删除指定的菜单。
+	 * 
+	 * @param id 菜单id。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean deleteMenu(int id,YDataBase db)
+	{
+		boolean retValue = false;
+		
+		try
+        {
+			if (id < 0)
+            {
+				Exception e = new Exception("未指定要删除的菜单id！");
+				throw e;
+            }
+            else
+            {
+            	//获取子菜单。
+            	List<MenuInfo> cMenus = this.getMenusByParentId(id, db);
+            	if(null != cMenus)
+            	{
+            		for(int i = 0;i < cMenus.size();i++)
+            		{
+            			//删除子菜单。
+            			if(!this.deleteMenu(cMenus.get(i).getId(), db))
+            			{
+            				Exception e = new Exception(db.getLastErrorMessage());
+                    		throw e;
+            			}
+            		}
+            		
+            		//构建SQL语句
+    				String sql = "";
+    				YSqlParameters ps = new YSqlParameters();
+    				ps.addParameter(1, id);
+    				
+    				if(YDataBaseType.MSSQL == db.getDatabaseType())
+    				{
+    					sql = "DELETE FROM SYS_MENUS WHERE ID = ?";
+    				}
+    				else
+    				{
+    					Exception e = new Exception("不支持的数据库类型！");
+    					throw e;
+    				}
+    				
+    				//执行语句。
+    				int rowCount = db.executeSqlWithOutData(sql,ps);
+    				if(rowCount >= 0)
+    				{
+    					retValue = true;
+    				}
+    				else
+    				{
+    					Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+    					throw e;
+    				}
+            	}
+            	else
+            	{
+            		Exception e = new Exception("获取子菜单出错！" + db.getLastErrorMessage());
+            		throw e;
+            	}
+            }
+        }
+        catch(Exception ex)
+        {
+        	this.lastErrorMessage = ex.getMessage();
+        }
+		
+		return retValue;
+	}
+	
+	/**
 	 * 创建关联页面。
 	 * 
 	 * @param page 页面信息。
@@ -1301,7 +1479,7 @@ public class MenuDataBase
 	 * @param ids 页面id数组。
 	 * @return 成功返回true，否则返回false。
 	 */
-	public boolean deleteMenus(int[] ids)
+	public boolean deletePages(int[] ids)
 	{
 		boolean retValue = false;
 		
@@ -1309,7 +1487,7 @@ public class MenuDataBase
 		{
 			if(this.menuDatabase.connectDataBase())
 			{
-				retValue = this.deleteMenus(ids,this.menuDatabase);
+				retValue = this.deletePages(ids,this.menuDatabase);
 			}
 			else
 			{
@@ -1336,7 +1514,7 @@ public class MenuDataBase
 	 * @param db 使用的数据库连接。
 	 * @return 成功返回true，否则返回false。
 	 */
-	public boolean deleteMenus(int[] ids,YDataBase db)
+	public boolean deletePages(int[] ids,YDataBase db)
 	{
 		boolean retValue = false;
 		
@@ -1387,4 +1565,6 @@ public class MenuDataBase
 		
 		return retValue;
 	}
+	
+	
 }

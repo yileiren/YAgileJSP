@@ -31,14 +31,13 @@ public class PageDeleteAction extends ActionSupport
 				int[] ids = new int[sids.length];
 				for(int i = 0;i < sids.length;i++)
 				{
-					System.out.println(sids[i]);
 					ids[i] = Integer.valueOf(sids[i].trim());
 				}
 				
 				MenuDataBase db = MenuDataBase.createMenuDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
 				if(null != db)
 				{
-					if(!db.deleteMenus(ids))
+					if(!db.deletePages(ids))
 					{
 						Exception e = new Exception("删除数据出错！" + db.getLastErrorMessage());
 						throw e;
