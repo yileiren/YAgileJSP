@@ -111,12 +111,12 @@
             //判断选中
             if ($("input:checked[type='checkbox'][name='chkItem']").length != 1)
             {
-                alert("请选中要编辑的菜单，一次只能选择一个！");
+            	window.parent.$.messager.alert("提示","请选中要编辑的菜单，一次只能选择一个！","info");
                 return;
             }
-
+            
             //打开编辑页面
-            window.parent.popupsWindow("#popups", "修改菜单", 700, 230, "sys/menu/menu_edit.aspx?pageType=item&id=" + $("input:checked[type='checkbox'][name='chkItem']").eq(0).val() + "&parentId=" + $("#selectGroupId").val(), "icon-edit", true, true);
+            window.parent.popupsWindow("#popups", "修改菜单", 700, 230, "<%=basePath%>/background/sys/menu/menuQuery.action?menuId=" + $("input:checked[type='checkbox'][name='chkItem']").eq(0).val() + "&parentId=<s:property value="topMenuId"/>", "icon-edit", true, true);
         }
 
         /*!
@@ -180,7 +180,7 @@
 			</tr>
 		<s:iterator value="childMenus" id="menu">
 			<tr class="tableBody1">
-			<td style="text-align:center;"><input type="checkbox" name="chkItem" value="value="<s:property value="#menu.id"/>" /></td>
+			<td style="text-align:center;"><input type="checkbox" name="chkItem" value="<s:property value="#menu.id"/>" /></td>
 			<td><s:property value="#menu.name"/></td>
 			<td style="text-align:center;"><s:property value="#menu.icon"/></td>
 			<td style="text-align:center;"><s:property value="#menu.desktopIcon"/></td>
