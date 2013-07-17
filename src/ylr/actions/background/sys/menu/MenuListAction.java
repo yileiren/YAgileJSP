@@ -90,17 +90,11 @@ public class MenuListAction extends ActionSupport
 		}
 		catch(Exception ex)
 		{
-			this.returnMessage = ex.getMessage();
+			this.setReturnMessage(ex.getMessage());
 		}
-		
 		return SUCCESS;
 	}
-
-	public String getReturnMessage()
-	{
-		return returnMessage;
-	}
-
+	
 	public List<MenuInfo> getTopMenus()
 	{
 		return topMenus;
@@ -149,5 +143,15 @@ public class MenuListAction extends ActionSupport
 	public void setTopMenuIcon(String topMenuIcon)
 	{
 		this.topMenuIcon = topMenuIcon;
+	}
+
+	public String getReturnMessage()
+	{
+		return returnMessage;
+	}
+
+	public void setReturnMessage(String returnMessage)
+	{
+		this.returnMessage = returnMessage;
 	}
 }

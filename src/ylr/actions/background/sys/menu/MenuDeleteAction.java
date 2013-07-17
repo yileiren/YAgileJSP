@@ -107,7 +107,6 @@ public class MenuDeleteAction extends ActionSupport
 							Exception e = new Exception("删除数据出错！" + db.getLastErrorMessage());
 							throw e;
 						}
-						System.out.println(this.topMenuId);
 					}
 					else
 					{
@@ -127,7 +126,7 @@ public class MenuDeleteAction extends ActionSupport
 			this.returnMessage = ex.getMessage();
 		}
 		
-		return SUCCESS;
+		return NONE;
 	}
 
 	public String getChkGroup()

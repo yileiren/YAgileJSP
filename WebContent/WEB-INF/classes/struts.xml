@@ -75,7 +75,7 @@
 		
 		<!-- 删除菜单 -->
 		<action name="menuDelete" class="ylr.actions.background.sys.menu.MenuDeleteAction">
-			<result name="success" type="chain">
+			<result name="none" type="chain">
 				<param name="actionName">menuList</param>
 				<param name="namespace">/background</param>
 			</result>
