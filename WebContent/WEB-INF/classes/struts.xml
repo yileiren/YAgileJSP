@@ -117,5 +117,28 @@
 			<!-- 使用此拦截器 -->  
             <interceptor-ref name="mainInterceptor" />
 		</action>
+		
+		<!-- 组织机构列表 -->
+		<action name="organizationList" class="ylr.actions.background.sys.organization.OrganizationListAction">
+			<result name="none">/background/sys/organization/organization_list.jsp</result>
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
+		
+		<!-- 获取组织机构信息 -->
+		<action name="organizationQuery" class="ylr.actions.background.sys.organization.OrganizationQueryAction">
+			<result name="none">/background/sys/organization/organization_edit.jsp</result>
+			
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
+		
+		<!-- 保存组织机构信息 -->
+		<action name="organizationSave" class="ylr.actions.background.sys.organization.OrganizationSaveAction">
+			<result name="success">/background/message/closePopWindow.jsp</result>
+			<result name="error">/background/sys/organization/organization_edit.jsp</result>
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
 	</package>
 </struts>

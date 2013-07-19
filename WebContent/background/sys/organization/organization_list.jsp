@@ -4,8 +4,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>系统菜单</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>组织机构列表</title>
+	
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="cache-control" ontent="no-cache" />  
@@ -41,12 +42,12 @@
 		
 		/*!
          * \brief
-         * 新增分组。
-         * 作者：董帅 创建时间：2013-07-15 14:27:10
+         * 新增机构。
+         * 作者：董帅 创建时间：2013-07-19 14:17:53
          */
-        function addGroup()
+        function addOrg()
         {
-            window.parent.popupsWindow("#popups", "新增菜单分组", 700, 230, "<%=basePath%>/background/sys/menu/menuQuery.action", "icon-add", true, true);
+            window.parent.popupsWindow("#popups", "新增组织机构", 700, 230, "<%=basePath%>/background/sys/organization/organizationQuery.action", "icon-add", true, true);
         }
 		
         /*!
@@ -145,26 +146,25 @@
 		
 		$(document).ready(function ()
         {
-            var returnMessage = "<s:property value="returnMessage" />";
-            if("" != returnMessage)
+            var message = "<s:property value="message" />";
+            if("" != message)
             {
-            	window.parent.$.messager.alert("提示",returnMessage,"info");
+            	window.parent.$.messager.alert("提示",message,"info");
             }
         });
 	</script>
-	
 </head>
 <body class="easyui-layout">
 	<div data-options="region:'west',split:false,border:false" style="width:250px;background-color:#EEF5FD">
-	<div class="easyui-panel" data-options="title:'菜单分组',fit:true,tools:'#groutsButtons'" style="overflow-x:hidden;background-color:#FFFFFF">
-		<form id="topMenuForm" method="post">
-		<input type="hidden" id="topMenuId" name="topMenuId" value="<s:property value="topMenuId"/>" />
+	<div class="easyui-panel" data-options="title:'下属机构',fit:true,tools:'#groutsButtons'" style="overflow-x:hidden;background-color:#FFFFFF">
+		<form id="orgForm" method="post">
+		<input type="hidden" id="parentId" name="parentId" value="<s:property value="parentId"/>" />
 		<table class="listTable" style="width:100%;">
-		<s:iterator value="topMenus" id="menu">
+		<s:iterator value="orgs" id="org">
 			<tr  class="tableBody1">
 			<td style="width:30px;text-align:center;"><input type="checkbox" name="chkGroup" value="<s:property value="#menu.id"/>"></td>
 			<td>
-			<a href="#" class="easyui-linkbutton" data-options="iconCls:'<s:property value="#menu.icon"/>',plain:true" style="width:200px" onclick="javascript:showMenus(<s:property value="#menu.id"/>)"><s:property value="#menu.name"/></a>
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-organization',plain:true" style="width:200px" onclick="javascript:showMenus(<s:property value="#menu.id"/>)"><s:property value="#org.name"/></a>
 			</td>
 			</tr>
 		</s:iterator>
@@ -200,14 +200,14 @@
 	</form>
 	</div>
 	<div id="groutsButtons">
-		<a href="#" class="icon-add" title="新增分组" onclick="javascript:addGroup();"></a>
-		<a href="#" class="icon-edit" title="修改分组" onclick="javascript:editGroup();"></a>
-		<a href="#" class="icon-cancel" title="删除分组" onclick="javascript:deleteGroups();"></a>
+		<a href="#" class="icon-add" title="新增组织机构" onclick="javascript:addOrg();"></a>
+		<a href="#" class="icon-edit" title="修改组织机构" onclick="javascript:editGroup();"></a>
+		<a href="#" class="icon-cancel" title="删除组织机构" onclick="javascript:deleteGroups();"></a>
 	</div>
     <div id="menusButtons">
-		<a href="#" class="icon-add" title="新增菜单" onclick="javascript:addMenu();"></a>
-		<a href="#" class="icon-edit" title="修改菜单" onclick="javascript:editMenu();"></a>
-		<a href="#" class="icon-cancel" title="删除菜单" onclick="javascript:deleteItem();"></a>
+		<a href="#" class="icon-add" onclick="javascript:addMenu();"></a>
+		<a href="#" class="icon-edit" onclick="javascript:editMenu();"></a>
+		<a href="#" class="icon-cancel" onclick="javascript:deleteItem();"></a>
 	</div>
 </body>
 </html>

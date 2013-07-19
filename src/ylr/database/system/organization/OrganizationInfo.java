@@ -13,17 +13,17 @@ public class OrganizationInfo
 	/**
 	 * 组织机构id。
 	 */
-	private int id;
+	private int id = -1;
 	
 	/**
 	 * 组织机构名称。
 	 */
-	private String name;
+	private String name = "";
 	
 	/**
 	 * 上级机构。
 	 */
-	private OrganizationInfo praentOrganization;
+	private int parentId = -1;
 	
 	/**
 	 * 创建时间。
@@ -33,12 +33,12 @@ public class OrganizationInfo
 	/**
 	 * 是否删除。
 	 */
-	private boolean isDelete;
+	private boolean isDelete = false;
 	
 	/**
 	 * 排序序号。
 	 */
-	private int order;
+	private int order = 0;
 
 	public int getId()
 	{
@@ -58,16 +58,6 @@ public class OrganizationInfo
 	public void setName(String name)
 	{
 		this.name = name;
-	}
-
-	public OrganizationInfo getPraentOrganization()
-	{
-		return praentOrganization;
-	}
-
-	public void setPraentOrganization(OrganizationInfo praentOrganization)
-	{
-		this.praentOrganization = praentOrganization;
 	}
 
 	public Date getCreateTime()
@@ -98,5 +88,15 @@ public class OrganizationInfo
 	public void setOrder(int order)
 	{
 		this.order = order;
+	}
+
+	public int getParentId()
+	{
+		return parentId;
+	}
+
+	public void setParentId(int parentId)
+	{
+		this.parentId = parentId;
 	}
 }
