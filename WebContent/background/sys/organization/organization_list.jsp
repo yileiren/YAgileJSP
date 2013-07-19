@@ -172,7 +172,7 @@
 		</form>
 	</div>
 	</div>
-	<div id="center" data-options="region:'center',title:'<s:property value="topMenuName"/>',iconCls:'<s:property value="topMenuIcon"/>',tools:'#menusButtons'" style="padding:3px;background-color:#EEF5FD">
+	<div id="center" data-options="region:'center',title:'<s:property value="parentOrg.name"/>的用户',iconCls:'<s:property value="topMenuIcon"/>',tools:'#menusButtons'" style="padding:3px;background-color:#EEF5FD">
 	<form id="itemMenuForm" method="post">
 		<table class="listTable" style="width:100%;">
 			<tr class="tableHead">
