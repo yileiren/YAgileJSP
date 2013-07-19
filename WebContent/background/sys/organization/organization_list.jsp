@@ -47,25 +47,25 @@
          */
         function addOrg()
         {
-            window.parent.popupsWindow("#popups", "新增组织机构", 700, 230, "<%=basePath%>/background/sys/organization/organizationQuery.action", "icon-add", true, true);
+            window.parent.popupsWindow("#popups", "新增组织机构", 700, 230, "<%=basePath%>/background/sys/organization/organizationQuery.action?parentId=<s:property value="parentId"/>", "icon-add", true, true);
         }
 		
         /*!
          * \brief
-         * 修改分组。
-         * 作者：董帅 创建时间：2013-07-16 13:18:05
+         * 修改组织机构信息。
+         * 作者：董帅 创建时间：2013-07-19 16:35:40
          */
-        function editGroup()
+        function editOrg()
         {
             //判断选中
-            if ($("input:checked[type='checkbox'][name='chkGroup']").length != 1)
+            if ($("input:checked[type='checkbox'][name='chkOrg']").length != 1)
             {
-            	window.parent.$.messager.alert("提示","请选中要编辑的分组，一次只能选择一个！","info");
+            	window.parent.$.messager.alert("提示","请选中要修改的组织机构，一次只能选择一个！","info");
                 return;
             }
 
             //打开编辑页面
-            window.parent.popupsWindow("#popups", "修改菜单分组", 700, 230, "<%=basePath%>/background/sys/menu/menuQuery.action?menuId=" + $("input:checked[type='checkbox'][name='chkGroup']").eq(0).val(), "icon-edit", true, true);
+            window.parent.popupsWindow("#popups", "修改组织机构信息", 700, 230, "<%=basePath%>/background/sys/organization/organizationQuery.action?parentId=<s:property value="parentId"/>&orgId=" + $("input:checked[type='checkbox'][name='chkOrg']").eq(0).val(), "icon-edit", true, true);
         }
 
         /*!
@@ -156,15 +156,15 @@
 </head>
 <body class="easyui-layout">
 	<div data-options="region:'west',split:false,border:false" style="width:250px;background-color:#EEF5FD">
-	<div class="easyui-panel" data-options="title:'下属机构',fit:true,tools:'#groutsButtons'" style="overflow-x:hidden;background-color:#FFFFFF">
+	<div class="easyui-panel" data-options="title:'<s:property value="parentOrg.name"/>',fit:true,tools:'#groutsButtons'" style="overflow-x:hidden;background-color:#FFFFFF">
 		<form id="orgForm" method="post">
 		<input type="hidden" id="parentId" name="parentId" value="<s:property value="parentId"/>" />
 		<table class="listTable" style="width:100%;">
 		<s:iterator value="orgs" id="org">
 			<tr  class="tableBody1">
-			<td style="width:30px;text-align:center;"><input type="checkbox" name="chkGroup" value="<s:property value="#menu.id"/>"></td>
+			<td style="width:30px;text-align:center;"><input type="checkbox" name="chkOrg" value="<s:property value="#org.id"/>"></td>
 			<td>
-			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-organization',plain:true" style="width:200px" onclick="javascript:showMenus(<s:property value="#menu.id"/>)"><s:property value="#org.name"/></a>
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-organization',plain:true" style="width:200px" onclick="javascript:location.href='<%=basePath%>/background/sys/organization/organizationList.action?parentId=<s:property value="#org.id"/>'"><s:property value="#org.name"/></a>
 			</td>
 			</tr>
 		</s:iterator>
@@ -200,8 +200,9 @@
 	</form>
 	</div>
 	<div id="groutsButtons">
+		<s:if test="parentId!=-1"><a href="#" class="icon-back" title="返回上级" onclick="javascript:location.href='<%=basePath%>/background/sys/organization/organizationList.action?parentId=<s:property value="parentOrg.parentId"/>'"></a></s:if>
 		<a href="#" class="icon-add" title="新增组织机构" onclick="javascript:addOrg();"></a>
-		<a href="#" class="icon-edit" title="修改组织机构" onclick="javascript:editGroup();"></a>
+		<a href="#" class="icon-edit" title="修改组织机构" onclick="javascript:editOrg();"></a>
 		<a href="#" class="icon-cancel" title="删除组织机构" onclick="javascript:deleteGroups();"></a>
 	</div>
     <div id="menusButtons">

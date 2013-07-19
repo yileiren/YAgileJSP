@@ -1,11 +1,8 @@
 package ylr.database.system.organization;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import ylr.YDB.YDataBase;
 import ylr.YDB.YDataBaseConfig;
@@ -355,5 +352,246 @@ public class OrganizationDataBase
 		}
 		
 		return orgs;
+	}
+	
+	/**
+	 * 获取指定的组织机构信息。
+	 * 
+	 * @param id 组织机构id。
+	 * @return 成功返回组织机构信息，否则返回null。
+	 */
+	public OrganizationInfo getOrganization(int id)
+	{
+		OrganizationInfo org = null;
+		
+		try
+		{
+			if(this.organizationDatabase.connectDataBase())
+			{
+				org = this.getOrganization(id,this.organizationDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.organizationDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.organizationDatabase.disconnectDataBase();
+		}
+		
+		return org;
+	}
+	
+	/**
+	 * 获取指定的组织机构信息。
+	 * 
+	 * @param id 组织机构id。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回组织机构信息，否则返回null。
+	 */
+	public OrganizationInfo getOrganization(int id,YDataBase db)
+	{
+		OrganizationInfo org = null;
+		
+		try
+		{
+			if(id < 0)
+			{
+				Exception e = new Exception("指定id有误！");
+				throw e;
+			}
+			else
+			{
+				//构建SQL语句
+				String sql = "";
+				
+				if(YDataBaseType.MSSQL == db.getDatabaseType())
+				{
+					sql = "SELECT * FROM ORG_ORGANIZATION WHERE ISDELETE = 'N' AND ID = ?";
+				}
+				else
+				{
+					Exception e = new Exception("不支持的数据库类型！");
+					throw e;
+				}
+				
+				YSqlParameters ps = new YSqlParameters();
+				ps.addParameter(1, id);
+				
+				//执行
+				YDataTable table = db.executeSqlReturnData(sql,ps);
+				
+				if(null != table && table.rowCount() > 0)
+				{
+					org = new OrganizationInfo();
+					
+					if(null != table.getData(0,"ID"))
+					{
+						org.setId((Integer)table.getData(0,"ID"));
+					}
+					
+					if(null != table.getData(0,"NAME"))
+					{
+						org.setName((String)table.getData(0,"NAME"));
+					}
+					
+					if(null != table.getData(0,"PARENTID"))
+					{
+						org.setParentId((Integer)table.getData(0,"PARENTID"));
+					}
+					
+					if(null != table.getData(0, "CREATETIME"))
+					{
+						org.setCreateTime((Date)table.getData(0, "CREATETIME"));
+					}
+					
+					if(null != table.getData(0, "ISDELETE"))
+					{
+						String isDelete = (String)table.getData(0, "ISDELETE");
+						if(isDelete.equals("N"))
+						{
+							org.setDelete(false);
+						}
+						else
+						{
+							org.setDelete(true);
+						}
+					}
+					
+					if(null != table.getData(0, "ORDER"))
+					{
+						org.setOrder((Integer)table.getData(0, "ORDER"));
+					}
+				}
+				else
+				{
+					Exception e = new Exception("获取数据失败！" + this.organizationDatabase.getLastErrorMessage());
+					throw e;
+				}
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		return org;
+	}
+	
+	/**
+	 * 修改组织机构信息。
+	 * 
+	 * @param org 要修改的组织机构。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean changeOrganization(OrganizationInfo org)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			if(this.organizationDatabase.connectDataBase())
+			{
+				retValue = this.changeOrganization(org,this.organizationDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.organizationDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.organizationDatabase.disconnectDataBase();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 修改组织机构信息。
+	 * 
+	 * @param org 要修改的组织机构。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean changeOrganization(OrganizationInfo org,YDataBase db)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			if(org == null)
+			{
+				Exception e = new Exception("组织机构为null！");
+				throw e;
+			}
+			else
+			{
+				//构建SQL语句
+				String sql = "";
+				YSqlParameters ps = new YSqlParameters();
+				
+				if(org.getParentId() == -1)
+				{
+					if(YDataBaseType.MSSQL == db.getDatabaseType())
+					{
+						sql = "UPDATE ORG_ORGANIZATION SET NAME = ?,[ORDER] = ? WHERE ID = ?";
+						ps.addParameter(1, org.getName());
+						ps.addParameter(2, org.getOrder());
+						ps.addParameter(3, org.getId());
+					}
+					else
+					{
+						Exception e = new Exception("不支持的数据库类型！");
+						throw e;
+					}
+				}
+				else
+				{
+					if(YDataBaseType.MSSQL == db.getDatabaseType())
+					{
+						sql = "UPDATE ORG_ORGANIZATION SET NAME = ?,PARENTID = ?,[ORDER] = ? WHERE ID = ?";
+						ps.addParameter(1, org.getName());
+						ps.addParameter(2, org.getParentId());
+						ps.addParameter(3, org.getOrder());
+						ps.addParameter(4, org.getId());
+					}
+					else
+					{
+						Exception e = new Exception("不支持的数据库类型！");
+						throw e;
+					}
+				}
+				
+				//执行
+				int rowCount = db.executeSqlWithOutData(sql,ps);
+				
+				if(rowCount == 1)
+				{
+					retValue = true;
+				}
+				else
+				{
+					Exception e = new Exception("更新数据失败！" + this.organizationDatabase.getLastErrorMessage());
+					throw e;
+				}
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		
+		return retValue;
 	}
 }

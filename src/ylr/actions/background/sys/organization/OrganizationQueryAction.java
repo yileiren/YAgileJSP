@@ -1,5 +1,7 @@
 package ylr.actions.background.sys.organization;
 
+import ylr.actions.background.sys.SystemConfig;
+import ylr.database.system.organization.OrganizationDataBase;
 import ylr.database.system.organization.OrganizationInfo;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -36,6 +38,32 @@ public class OrganizationQueryAction extends ActionSupport
 	
 	public String execute()
 	{
+		try
+		{
+			OrganizationDataBase db = OrganizationDataBase.createOrganizationDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
+			if(null != db)
+			{
+				if(this.orgId != -1)
+				{
+					this.org = db.getOrganization(this.orgId);
+					if(this.org == null)
+					{
+						Exception e = new Exception("获取机构信息出错！" + db.getLastErrorMessage());
+						throw e;
+					}
+				}
+			}
+			else
+			{
+				Exception e = new Exception("创建数据库访问对象失败！");
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.message = ex.getMessage();
+		}
+		
 		return NONE;
 	}
 

@@ -33,6 +33,11 @@ public class OrganizationListAction extends ActionSupport
 	 */
 	private List<OrganizationInfo> orgs = null;
 	
+	/**
+	 * 上级机构
+	 */
+	private OrganizationInfo parentOrg = null;
+	
 	public String execute()
 	{
 		try
@@ -40,14 +45,30 @@ public class OrganizationListAction extends ActionSupport
 			OrganizationDataBase db = OrganizationDataBase.createOrganizationDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
 			if(null != db)
 			{
-				System.out.println(this.parentId);
+				//获取机构列表。
 				this.orgs = db.getOrganizationsByParentId(this.parentId);
-				System.out.println(this.orgs);
 				
 				if(null == this.orgs)
 				{
 					Exception e = new Exception("获取组织机构列表出错！" + db.getLastErrorMessage());
 					throw e;
+				}
+				
+				//获取上级机构信息。
+				if(this.parentId == -1)
+				{
+					this.parentOrg = new OrganizationInfo();
+					this.parentOrg.setId(-1);
+					this.parentOrg.setName("顶级机构");
+				}
+				else
+				{
+					this.parentOrg = db.getOrganization(this.parentId);
+					if(this.parentOrg == null)
+					{
+						Exception e = new Exception("获取上级机构出错！" + db.getLastErrorMessage());
+						throw e;
+					}
 				}
 			}
 			else
@@ -93,6 +114,18 @@ public class OrganizationListAction extends ActionSupport
 	public void setOrgs(List<OrganizationInfo> orgs)
 	{
 		this.orgs = orgs;
+	}
+
+
+	public OrganizationInfo getParentOrg()
+	{
+		return parentOrg;
+	}
+
+
+	public void setParentOrg(OrganizationInfo parentOrg)
+	{
+		this.parentOrg = parentOrg;
 	}
 
 }

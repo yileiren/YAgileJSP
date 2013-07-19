@@ -93,6 +93,25 @@ public class OrganizationSaveAction extends ActionSupport
 	            	else
 	            	{
 	            		//修改
+	            		this.org.setId(this.orgId);
+	            		this.org.setParentId(this.parentId);
+	            		if(db.changeOrganization(this.org))
+	            		{
+	            			retValue = SUCCESS;
+		            		
+		            		//设置跳转地址
+							HttpServletRequest request = ServletActionContext.getRequest();
+							this.centerIframeURL = request.getScheme() 
+									+ "://" + request.getServerName() 
+									+ ":" + request.getServerPort() 
+									+request.getContextPath() 
+									+ "/background/sys/organization/organizationList.action?parentId=" + String.valueOf(this.parentId);
+	            		}
+	            		else
+		            	{
+		            		Exception e = new Exception("修改组织机构失败！" + db.getLastErrorMessage());
+		    				throw e;
+		            	}
 	            	}
 	            }
 				else
