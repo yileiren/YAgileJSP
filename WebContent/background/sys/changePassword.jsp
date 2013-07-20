@@ -65,9 +65,9 @@
 	<div id="center" data-options="region:'center'" style="padding:3px;background-color:#EEF5FD">
 	<form id="changePasswordForm" method="post" action="<%=basePath%>/background/sys/changePassword.action">
 		<table class="editTable" style="width:100%;">
-            <tr><th style="width:70px">原密码：</td><td><input type="password" id="pswOldPsw" name="pswOldPsw" /></td></tr>
-            <tr><th style="width:70px">新密码：</td><td><input type="password" id="pswNewPsw1" name="pswNewPsw1" /></td></tr>
-            <tr><th style="width:70px">确认密码：</td><td><input type="password" id="pswNewPsw2" name="pswNewPsw2" /></td></tr>
+            <tr><th style="width:70px">原密码：</th><td><input type="password" id="pswOldPsw" name="pswOldPsw" /></td></tr>
+            <tr><th style="width:70px">新密码：</th><td><input type="password" id="pswNewPsw1" name="pswNewPsw1" /></td></tr>
+            <tr><th style="width:70px">确认密码：</th><td><input type="password" id="pswNewPsw2" name="pswNewPsw2" /></td></tr>
         </table>
     </form>
 	</div>

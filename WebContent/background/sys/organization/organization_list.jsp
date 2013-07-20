@@ -94,12 +94,12 @@
 
         /*!
          * \brief
-         * 新增菜单。
-         * 作者：董帅 创建时间：2013-07-16 13:18:11
+         * 新增用户。
+         * 作者：董帅 创建时间：2013-07-20 22:15:21
          */
-        function addMenu()
+        function addUser()
         {
-            window.parent.popupsWindow("#popups", "新增菜单", 700, 230, "<%=basePath%>/background/sys/menu/menuQuery.action?parentId=<s:property value="topMenuId"/>", "icon-add", true, true);
+            window.parent.popupsWindow("#popups", "新增用户", 700, 230, "<%=basePath%>/background/sys/organization/userQuery.action?parentId=<s:property value="parentId"/>", "icon-add", true, true);
         }
 
         /*!
@@ -156,7 +156,7 @@
 </head>
 <body class="easyui-layout">
 	<div data-options="region:'west',split:false,border:false" style="width:250px;background-color:#EEF5FD">
-	<div class="easyui-panel" data-options="title:'<s:property value="parentOrg.name"/>',fit:true,tools:'#groutsButtons'" style="overflow-x:hidden;background-color:#FFFFFF">
+	<div class="easyui-panel" data-options="title:'/<s:property value="parentOrg.name"/>',fit:true,tools:'#groutsButtons'" style="overflow-x:hidden;background-color:#FFFFFF">
 		<form id="orgForm" method="post">
 		<input type="hidden" id="parentId" name="parentId" value="<s:property value="parentId"/>" />
 		<table class="listTable" style="width:100%;">
@@ -206,7 +206,7 @@
 		<a href="#" class="icon-cancel" title="删除组织机构" onclick="javascript:deleteGroups();"></a>
 	</div>
     <div id="menusButtons">
-		<a href="#" class="icon-add" onclick="javascript:addMenu();"></a>
+		<a href="#" class="icon-add" onclick="javascript:addUser();"></a>
 		<a href="#" class="icon-edit" onclick="javascript:editMenu();"></a>
 		<a href="#" class="icon-cancel" onclick="javascript:deleteItem();"></a>
 	</div>

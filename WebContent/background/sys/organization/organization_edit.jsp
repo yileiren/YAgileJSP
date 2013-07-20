@@ -69,8 +69,8 @@
 		<input type="hidden" id="orgId" name="orgId" value="<s:property value="orgId" />" />
 		<input type="hidden" id="parentId" name="parentId" value="<s:property value="parentId" />" />
 		<table class="editTable" style="width:100%;">
-            <tr><th style="width:120px">名称：</td><td><input type="input" id="orgName" name="org.name" value="<s:property value="org.name" />" class="easyui-validatebox" data-options="required:true" maxlength="50" style="width:300px" /></td></tr>
-            <tr><th style="width:120px">序号：</td><td><input type="text" id="orgOrder" name="org.order" class="easyui-numberspinner" data-options="min:0,max:50000,precision:0" value="<s:if test="org==nulll">0</s:if><s:else><s:property value="org.order" /></s:else>" style="width:100px;text-align:right;" /></td></tr>
+            <tr><th style="width:120px">名称：</th><td><input type="input" id="orgName" name="org.name" value="<s:property value="org.name" />" class="easyui-validatebox" data-options="required:true" maxlength="50" style="width:300px" /></td></tr>
+            <tr><th style="width:120px">序号：</th><td><input type="text" id="orgOrder" name="org.order" class="easyui-numberspinner" data-options="min:0,max:50000,precision:0" value="<s:if test="org==nulll">0</s:if><s:else><s:property value="org.order" /></s:else>" style="width:100px;text-align:right;" /></td></tr>
         </table>
     </form>
 	</div>
