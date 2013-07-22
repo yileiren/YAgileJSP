@@ -69,11 +69,11 @@
 		<input type="hidden" id="parentId" name="parentId" value="<s:property value="parentId" />" />
 		<input type="hidden" id="menuId" name="menuId" value="<s:property value="menuId" />" />
 		<table class="editTable" style="width:100%;">
-            <tr><th style="width:120px">名称：</td><td><input type="input" id="menuName" name="menuName" value="<s:property value="menuName" />" class="easyui-validatebox" data-options="required:true" maxlength="20" style="width:300px" /></td></tr>
-            <tr style="<s:if test="parentId == -1">display: none;</s:if>"><th style="width:120px">页面URL：</td><td><input type="input" id="menuURL" name="menuURL" value="<s:property value="menuURL" />" maxlength="200" style="width:300px" /></td></tr>
-            <tr><th style="width:120px">菜单图标：</td><td><input type="input" id="menuIcon" name="menuIcon" value="<s:property value="menuIcon" />" data-options="required:true" maxlength="20" style="width:300px" /></td></tr>
-            <tr style="<s:if test="parentId == -1">display: none;</s:if>"><th style="width:120px">桌面图标：</td><td><input type="input" id="menuDesktopIcon" name="menuDesktopIcon" value="<s:property value="menuDesktopIcon" />" maxlength="20" style="width:300px" /></td></tr>
-            <tr><th style="width:120px">序号：</td><td><input type="text" id="menuOrder" name="menuOrder" class="easyui-numberspinner" min="0" max="50000" precision="0" value="<s:property value="menuOrder" />" style="width:100px;text-align:right;" /></td></tr>
+            <tr><th style="width:120px">名称：</th><td><input type="input" id="menuName" name="menuName" value="<s:property value="menuName" />" class="easyui-validatebox" data-options="required:true" maxlength="20" style="width:300px" /></td></tr>
+            <tr style="<s:if test="parentId == -1">display: none;</s:if>"><th style="width:120px">页面URL：</th><td><input type="input" id="menuURL" name="menuURL" value="<s:property value="menuURL" />" maxlength="200" style="width:300px" /></td></tr>
+            <tr><th style="width:120px">菜单图标：</th><td><input type="input" id="menuIcon" name="menuIcon" value="<s:property value="menuIcon" />" data-options="required:true" maxlength="20" style="width:300px" /></td></tr>
+            <tr style="<s:if test="parentId == -1">display: none;</s:if>"><th style="width:120px">桌面图标：</th><td><input type="input" id="menuDesktopIcon" name="menuDesktopIcon" value="<s:property value="menuDesktopIcon" />" maxlength="20" style="width:300px" /></td></tr>
+            <tr><th style="width:120px">序号：</th><td><input type="text" id="menuOrder" name="menuOrder" class="easyui-numberspinner" min="0" max="50000" precision="0" value="<s:property value="menuOrder" />" style="width:100px;text-align:right;" /></td></tr>
         </table>
     </form>
 	</div>

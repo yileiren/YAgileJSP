@@ -140,5 +140,13 @@
 			<!-- 使用此拦截器 -->  
             <interceptor-ref name="mainInterceptor" />
 		</action>
+		
+		<!-- 获取用户信息 -->
+		<action name="userQuery" class="ylr.actions.background.sys.organization.UserQueryAction">
+			<result name="none">/background/sys/organization/user_edit.jsp</result>
+			
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
 	</package>
 </struts>
