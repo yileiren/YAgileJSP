@@ -96,7 +96,7 @@
             <tr><th style="width:120px">登陆名：</th><td><input type="input" id="userLogName" name="user.logName" value="<s:property value="user.logName" />" class="easyui-validatebox" data-options="required:true" maxlength="20" style="width:300px" /></td></tr>
             <tr><th style="width:120px">登陆密码：</th><td><input type="password" id="logPassword" name="user.logPassword" maxlength="20" style="width:300px" /></td></tr>
             <tr><th style="width:120px">确认密码：</th><td><input type="password" id="logPassword2" name="logPassword2" maxlength="20" style="width:300px" /></td></tr>
-            <tr><th style="width:120px">序号：</th><td><input type="text" id="orgOrder" name="org.order" class="easyui-numberspinner" data-options="min:0,max:50000,precision:0" value="<s:if test="org==nulll">0</s:if><s:else><s:property value="org.order" /></s:else>" style="width:100px;text-align:right;" /></td></tr>
+            <tr><th style="width:120px">序号：</th><td><input type="text" id="orgOrder" name="user.order" class="easyui-numberspinner" data-options="min:0,max:50000,precision:0" value="<s:if test="org==nulll">0</s:if><s:else><s:property value="org.order" /></s:else>" style="width:100px;text-align:right;" /></td></tr>
         </table>
     </form>
 	</div>
