@@ -22,6 +22,8 @@ public class UserQueryAction extends ActionSupport
 	
 	private UserInfo user = null;
 	
+	private String message = "";
+	
 	public String execute()
 	{
 		return NONE;
@@ -55,5 +57,15 @@ public class UserQueryAction extends ActionSupport
 	public void setUser(UserInfo user)
 	{
 		this.user = user;
+	}
+
+	public String getMessage()
+	{
+		return message;
+	}
+
+	public void setMessage(String message)
+	{
+		this.message = message;
 	}
 }

@@ -259,7 +259,7 @@ public class MenuDataBase
 			}
 			else
 			{
-				Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+				Exception e = new Exception(db.getLastErrorMessage());
 				throw e;
 			}
         }
@@ -404,7 +404,7 @@ public class MenuDataBase
 			}
 			else
 			{
-				Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+				Exception e = new Exception(db.getLastErrorMessage());
 				throw e;
 			}
         }
@@ -535,7 +535,7 @@ public class MenuDataBase
 			}
 			else
 			{
-				Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+				Exception e = new Exception(db.getLastErrorMessage());
 				throw e;
 			}
         }
@@ -679,13 +679,13 @@ public class MenuDataBase
 					}
 					else
 					{
-						Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+						Exception e = new Exception(db.getLastErrorMessage());
 						throw e;
 					}
 				}
 				else
 				{
-					Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+					Exception e = new Exception(db.getLastErrorMessage());
 					throw e;
 				}
             }
@@ -828,7 +828,7 @@ public class MenuDataBase
 				}
 				else
 				{
-					Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+					Exception e = new Exception(db.getLastErrorMessage());
 					throw e;
 				}
             }
@@ -1003,13 +1003,13 @@ public class MenuDataBase
 	    				}
 	    				else
 	    				{
-	    					Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+	    					Exception e = new Exception(db.getLastErrorMessage());
 	    					throw e;
 	    				}
             		}
             		else
             		{
-            			Exception e = new Exception("删除关联页面失败！" + this.menuDatabase.getLastErrorMessage());
+            			Exception e = new Exception("删除关联页面失败！" + db.getLastErrorMessage());
     					throw e;
             		}
             	}
@@ -1129,13 +1129,13 @@ public class MenuDataBase
 					}
 					else
 					{
-						Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+						Exception e = new Exception(db.getLastErrorMessage());
 						throw e;
 					}
 				}
 				else
 				{
-					Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+					Exception e = new Exception(db.getLastErrorMessage());
 					throw e;
 				}
             }
@@ -1249,7 +1249,7 @@ public class MenuDataBase
 			}
 			else
 			{
-				Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+				Exception e = new Exception(db.getLastErrorMessage());
 				throw e;
 			}
         }
@@ -1362,7 +1362,7 @@ public class MenuDataBase
 			}
 			else
 			{
-				Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+				Exception e = new Exception(db.getLastErrorMessage());
 				throw e;
 			}
         }
@@ -1469,7 +1469,7 @@ public class MenuDataBase
 				}
 				else
 				{
-					Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+					Exception e = new Exception(db.getLastErrorMessage());
 					throw e;
 				}
             }
@@ -1562,7 +1562,7 @@ public class MenuDataBase
 				}
 				else
 				{
-					Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+					Exception e = new Exception(db.getLastErrorMessage());
 					throw e;
 				}
             }
@@ -1652,7 +1652,7 @@ public class MenuDataBase
 				}
 				else
 				{
-					Exception e = new Exception(this.menuDatabase.getLastErrorMessage());
+					Exception e = new Exception(db.getLastErrorMessage());
 					throw e;
 				}
             }

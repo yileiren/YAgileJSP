@@ -191,7 +191,7 @@ public class UserDataBase
 			}
 			else
 			{
-				Exception e = new Exception(this.userDatabase.getLastErrorMessage());
+				Exception e = new Exception(db.getLastErrorMessage());
 				throw e;
 			}
 		}
@@ -287,8 +287,163 @@ public class UserDataBase
 			}
 			else
 			{
-				Exception e = new Exception(this.userDatabase.getLastErrorMessage());
+				Exception e = new Exception(db.getLastErrorMessage());
 				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 创建用户。
+	 * 
+	 * @param user 用户信息。
+	 * @return 成功返回用户id，否发返回-1。
+	 */
+	public int createUser(UserInfo user)
+	{
+		int retValue = -1;
+		
+		try
+		{
+			if(this.userDatabase.connectDataBase())
+			{
+				retValue = this.createUser(user, this.userDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("连接数据库失败！" + this.userDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.userDatabase.disconnectDataBase();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 创建用户。
+	 * 
+	 * @param user 用户信息。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回用户id，否发返回-1。
+	 */
+	public int createUser(UserInfo user,YDataBase db)
+	{
+		int retValue = -1;
+		
+		try
+		{
+			if(null == user)
+			{
+				Exception e = new Exception("用户信息为null！");
+				throw e;
+			}
+			else if(null == user.getName() || user.getName().equals(""))
+			{
+				Exception e = new Exception("未设置用户姓名！");
+				throw e;
+			}
+			else if(user.getName().length() > 20)
+			{
+				Exception e = new Exception("用户姓名字符个数超过20！");
+				throw e;
+			}
+			else if(null == user.getLogName() || user.getLogName().equals(""))
+			{
+				Exception e = new Exception("未设置用户登陆名！");
+				throw e;
+			}
+			else if(user.getLogName().length() > 20)
+			{
+				Exception e = new Exception("用户登陆名字符个数超过20！");
+				throw e;
+			}
+			else if(user.getLogPassword() == null || user.getLogPassword().length() > 40)
+			{
+				Exception e = new Exception("用户登陆密码不合法，不能大于40个字符！");
+				throw e;
+			}
+			else
+			{
+				//构建SQL语句
+				String sql = "";
+				//参数
+				YSqlParameters ps = new YSqlParameters();
+				
+				if(user.getOrganizationId() == -1)
+				{
+					//顶级机构用户
+					if(YDataBaseType.MSSQL == db.getDatabaseType())
+					{
+						sql = "INSERT INTO ORG_USER (LOGNAME,LOGPASSWORD,NAME,[ORDER]) VALUES (?,?,?,?)";
+						ps.addParameter(1, user.getLogName());
+						ps.addParameter(2, user.getLogPassword());
+						ps.addParameter(3, user.getName());
+						ps.addParameter(4, user.getOrder());
+					}
+					else
+					{
+						Exception e = new Exception("不支持的数据库类型！");
+						throw e;
+					}
+				}
+				else
+				{
+					if(YDataBaseType.MSSQL == db.getDatabaseType())
+					{
+						sql = "INSERT INTO ORG_USER (LOGNAME,LOGPASSWORD,NAME,ORGANIZATIONID,[ORDER]) VALUES (?,?,?,?,?)";
+						ps.addParameter(1, user.getLogName());
+						ps.addParameter(2, user.getLogPassword());
+						ps.addParameter(3, user.getName());
+						ps.addParameter(4, user.getOrganizationId());
+						ps.addParameter(5, user.getOrder());
+					}
+					else
+					{
+						Exception e = new Exception("不支持的数据库类型！");
+						throw e;
+					}
+				}
+				
+				//执行语句。
+				int rowCount = db.executeSqlWithOutData(sql, ps);
+				if(rowCount > 0)
+				{
+					//获取id
+					YDataTable table = db.executeSqlReturnData("SELECT @@IDENTITY AS ID");
+					
+					if(null != table && table.rowCount() > 0)
+					{
+						if(null != table.getData(0,"ID"))
+						{
+							double d = (Double)table.getData(0,"ID");
+							retValue = (int) d;
+						}
+					}
+					else
+					{
+						Exception e = new Exception(db.getLastErrorMessage());
+						throw e;
+					}
+				}
+				else
+				{
+					Exception e = new Exception(db.getLastErrorMessage());
+					throw e;
+				}
 			}
 		}
 		catch(Exception ex)

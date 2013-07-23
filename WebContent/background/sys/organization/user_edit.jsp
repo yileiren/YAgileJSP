@@ -25,19 +25,42 @@
     <script type="text/javascript" src="<%=basePath%>/js/jquery-easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
 	<script type="text/javascript" src="<%=basePath%>/js/YWindows.js"></script>
+	<script type="text/javascript" src="<%=basePath%>/js/md5.js"></script>
 	
 	<script type="text/javascript">
 		//表单验证方法
 	    function checkForms()
 	    {
-	        if ($("#orgName").validatebox("isValid"))
-	        {
-	            return true;
-	        }
-	        else
-	        {
-	            return false;
-	        }
+	    	if (!$("#userName").validatebox("isValid"))
+            {
+                return false;
+            }
+
+            if (!$("#userLogName").validatebox("isValid"))
+            {
+                return false;
+            }
+
+            //判断密码是否相同
+            if ($("#logPassword").val() != $("#logPassword2").val())
+            {
+                window.parent.$.messager.alert("提示","密码与确认密码不一致，请重新输入！","info");
+                return false;
+            }
+
+            //只有新增时加密空密码，否则不处理
+            if ($("#logPassword").val() != "" || ($("#userId").val() == "" && $("#logPassword").val() == ""))
+            {
+                $("#logPassword").val(hex_md5($("#logPassword").val()));
+                $("#logPassword2").val(hex_md5($("#logPassword2").val()));
+            }
+
+            if (!$("#orgOrder").validatebox("isValid"))
+            {
+                return false;
+            }
+
+            return true;
 	    }
 		
 		/*!
@@ -48,7 +71,7 @@
 		{
 			if(checkForms())
 			{
-				$("#orgEditForm").submit();
+				$("#userEditForm").submit();
 			}
 		}
 		
@@ -65,8 +88,8 @@
 </head>
 <body class="easyui-layout">
 	<div id="center" data-options="region:'center'" style="padding:3px;background-color:#EEF5FD">
-	<form id="orgEditForm" method="post" action="<%=basePath%>/background/sys/organization/organizationSave.action">
-		<input type="hidden" id="orgId" name="orgId" value="<s:property value="orgId" />" />
+	<form id="userEditForm" method="post" action="<%=basePath%>/background/sys/organization/userSave.action">
+		<input type="hidden" id="userId" name="userId" value="<s:if test="user == null">-1</s:if><s:else><s:property value="userId" /></s:else>" />
 		<input type="hidden" id="parentId" name="parentId" value="<s:property value="parentId" />" />
 		<table class="editTable" style="width:100%;">
             <tr><th style="width:120px">姓名：</th><td><input type="input" id="userName" name="user.name" value="<s:property value="user.name" />" class="easyui-validatebox" data-options="required:true" maxlength="20" style="width:300px" /></td></tr>

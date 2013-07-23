@@ -181,13 +181,13 @@ public class OrganizationDataBase
 					}
 					else
 					{
-						Exception e = new Exception(this.organizationDatabase.getLastErrorMessage());
+						Exception e = new Exception(db.getLastErrorMessage());
 						throw e;
 					}
 				}
 				else
 				{
-					Exception e = new Exception(this.organizationDatabase.getLastErrorMessage());
+					Exception e = new Exception(db.getLastErrorMessage());
 					throw e;
 				}
             }
@@ -342,7 +342,7 @@ public class OrganizationDataBase
 			}
 			else
 			{
-				Exception e = new Exception(this.organizationDatabase.getLastErrorMessage());
+				Exception e = new Exception(db.getLastErrorMessage());
 				throw e;
 			}
 		}
@@ -471,7 +471,7 @@ public class OrganizationDataBase
 				}
 				else
 				{
-					Exception e = new Exception("获取数据失败！" + this.organizationDatabase.getLastErrorMessage());
+					Exception e = new Exception("获取数据失败！" + db.getLastErrorMessage());
 					throw e;
 				}
 			}
@@ -582,7 +582,7 @@ public class OrganizationDataBase
 				}
 				else
 				{
-					Exception e = new Exception("更新数据失败！" + this.organizationDatabase.getLastErrorMessage());
+					Exception e = new Exception("更新数据失败！" + db.getLastErrorMessage());
 					throw e;
 				}
 			}

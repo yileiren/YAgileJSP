@@ -148,5 +148,13 @@
 			<!-- 使用此拦截器 -->  
             <interceptor-ref name="mainInterceptor" />
 		</action>
+		
+		<!-- 保存用户信息 -->
+		<action name="userSave" class="ylr.actions.background.sys.organization.UserSaveAction">
+			<result name="success">/background/message/closePopWindow.jsp</result>
+			<result name="error">/background/sys/organization/user_edit.jsp</result>
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
 	</package>
 </struts>
