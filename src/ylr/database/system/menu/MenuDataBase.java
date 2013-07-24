@@ -131,10 +131,10 @@ public class MenuDataBase
 				else
 				{
 					sql = "SELECT DISTINCT SYS_MENUS.* "
-                    		+ "FROM SYS_MENUS,AUT_USER_ROLE,AUT_ROLE_MENU"
-                    		+ "WHERE AUT_USER_ROLE.USERID = ?" 
-                            + "AND AUT_USER_ROLE.ROLEID = AUT_ROLE_MENU.ROLEID"
-                            + "AND AUT_ROLE_MENU.MENUID = SYS_MENUS.ID"
+                    		+ "FROM SYS_MENUS,AUT_USER_ROLE,AUT_ROLE_MENU "
+                    		+ "WHERE AUT_USER_ROLE.USERID = ? " 
+                            + "AND AUT_USER_ROLE.ROLEID = AUT_ROLE_MENU.ROLEID "
+                            + "AND AUT_ROLE_MENU.MENUID = SYS_MENUS.ID "
                             + "ORDER BY PARENTID ASC,[ORDER] ASC";
 				}
 			}
