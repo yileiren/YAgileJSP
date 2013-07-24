@@ -984,4 +984,100 @@ public class UserDataBase
 		
 		return retValue;
 	}
+	
+	/**
+	 * 删除指定的菜单。
+	 * 
+	 * @param ids 要删除的菜单id数组。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean deleteUsers(int[] ids)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			if(this.userDatabase.connectDataBase())
+			{
+				retValue = this.deleteUsers(ids, this.userDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("连接数据库出错！" + this.userDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 删除指定的菜单。
+	 * 
+	 * @param ids 要删除的菜单id数组。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean deleteUsers(int[] ids,YDataBase db)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			if(ids.length > 0)
+			{
+				//构建语句
+				String sql = "";
+				
+				switch(db.getDatabaseType())
+				{
+				case MSSQL:
+					{
+						//SqlServer数据库
+						sql = "UPDATE ORG_USER SET ISDELETE = 'Y' WHERE ID IN (";
+						sql += String.valueOf(ids[0]);
+						for(int i = 1;i < ids.length;i++)
+						{
+							sql += "," + String.valueOf(ids[i]);
+						}
+						sql += ")";
+						
+						break;
+					}
+				default:
+					{
+						Exception e = new Exception("不支持的数据库类型！");
+						throw e;
+					}
+				}
+				
+				//执行语句。
+				int rowCount = db.executeSqlWithOutData(sql);
+				if(rowCount >= 0)
+				{
+					retValue = true;
+				}
+				else
+				{
+					Exception e = new Exception(db.getLastErrorMessage());
+					throw e;
+				}
+			}
+			else
+			{
+				Exception e = new Exception("未指定要删除的用户id！");
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		
+		return retValue;
+	}
 }

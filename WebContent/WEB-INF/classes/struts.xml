@@ -156,5 +156,15 @@
 			<!-- 使用此拦截器 -->  
             <interceptor-ref name="mainInterceptor" />
 		</action>
+		
+		<!-- 删除用户信息 -->
+		<action name="userDelete" class="ylr.actions.background.sys.organization.UserDeleteAction">
+			<result name="none" type="chain">
+				<param name="actionName">organizationList</param>
+				<param name="namespace">/background</param>
+			</result>
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
 	</package>
 </struts>

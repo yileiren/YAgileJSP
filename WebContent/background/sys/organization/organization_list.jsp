@@ -122,25 +122,25 @@
 
         /*!
          * \brief
-         * 删除菜单。
-         * 作者：董帅 创建时间：2013-07-17 22:25:48
+         * 删除用户。
+         * 作者：董帅 创建时间：2013-07-24 14:18:13
          */
-        function deleteItem()
+        function deleteUsers()
         {
             //判断选中
-            if ($("input:checked[type='checkbox'][name='chkItem']").length > 0)
+            if ($("input:checked[type='checkbox'][name='chkUser']").length > 0)
             {
-                window.parent.$.messager.confirm("提示", "确认要删除选中的菜单？", function(r){
+                window.parent.$.messager.confirm("提示", "确认要删除选中的用户？", function(r){
      				if (r)
      				{
-     					$("#itemMenuForm").attr("action","<%=basePath%>/background/sys/menu/menuDelete.action?type=item&topMenuId=<s:property value="topMenuId"/>");
-     					$("#itemMenuForm").submit();
+     					$("#orgForm").attr("action","<%=basePath%>/background/sys/organization/userDelete.action");
+     					$("#orgForm").submit();
      				}
      			});
             }
             else
             {
-                window.parent.$.messager.alert("提示","请选中要删除的菜单！","info");
+                window.parent.$.messager.alert("提示","请选中要删除的用户！","info");
             }
         }
 		
@@ -155,9 +155,10 @@
 	</script>
 </head>
 <body class="easyui-layout">
+	<form id="orgForm" method="post">
 	<div data-options="region:'west',split:false,border:false" style="width:250px;background-color:#EEF5FD">
+	
 	<div class="easyui-panel" data-options="title:'/<s:property value="parentOrg.name"/>',fit:true,tools:'#groutsButtons'" style="overflow-x:hidden;background-color:#FFFFFF">
-		<form id="orgForm" method="post">
 		<input type="hidden" id="parentId" name="parentId" value="<s:property value="parentId"/>" />
 		<table class="listTable" style="width:100%;">
 		<s:iterator value="orgs" id="org">
@@ -169,11 +170,9 @@
 			</tr>
 		</s:iterator>
 		</table>
-		</form>
 	</div>
 	</div>
 	<div id="center" data-options="region:'center',title:'“<s:property value="parentOrg.name"/>”的用户',iconCls:'<s:property value="topMenuIcon"/>',tools:'#menusButtons'" style="padding:3px;background-color:#EEF5FD">
-	<form id="userForm" method="post">
 		<table class="listTable" style="width:100%;">
 			<tr class="tableHead">
 			<th style="width:30px;">选择</th>
@@ -192,8 +191,9 @@
 			</tr>
 		</s:iterator>
 		</table>
-	</form>
+		
 	</div>
+	</form>
 	<div id="groutsButtons">
 		<s:if test="parentId!=-1"><a href="#" class="icon-back" title="返回上级" onclick="javascript:location.href='<%=basePath%>/background/sys/organization/organizationList.action?parentId=<s:property value="parentOrg.parentId"/>'"></a></s:if>
 		<a href="#" class="icon-add" title="新增组织机构" onclick="javascript:addOrg();"></a>
@@ -203,7 +203,7 @@
     <div id="menusButtons">
 		<a href="#" class="icon-add" title="新增用户" onclick="javascript:addUser();"></a>
 		<a href="#" class="icon-edit" title="修改用户" onclick="javascript:editUser();"></a>
-		<a href="#" class="icon-cancel" title="删除用户" onclick="javascript:deleteItem();"></a>
+		<a href="#" class="icon-cancel" title="删除用户" onclick="javascript:deleteUsers();"></a>
 	</div>
 </body>
 </html>
