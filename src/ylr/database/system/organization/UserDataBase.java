@@ -1,5 +1,9 @@
 package ylr.database.system.organization;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import ylr.YDB.YDataBase;
 import ylr.YDB.YDataBaseConfig;
 import ylr.YDB.YDataBaseType;
@@ -378,6 +382,13 @@ public class UserDataBase
 			}
 			else
 			{
+				//判断用户是否存在
+				if(this.existUser(user.getLogName(), db))
+				{
+					Exception e = new Exception("用户登录名已存在！");
+					throw e;
+				}
+				
 				//构建SQL语句
 				String sql = "";
 				//参数
@@ -452,5 +463,212 @@ public class UserDataBase
 		}
 		
 		return retValue;
+	}
+	
+	/**
+	 * 判断用户登陆名是否存在。
+	 * 
+	 * @param logName 登录名。
+	 * @param db 使用的数据库连接。
+	 * @return 存在返回true，否则返回false。
+	 * @throws Exception 未处理的异常。
+	 */
+	public boolean existUser(String logName,YDataBase db) throws Exception
+    {
+		boolean retValue = false;
+        try
+        {
+        	//构建SQL语句
+        	String sql = "";
+        	YSqlParameters ps = new YSqlParameters();
+        	ps.addParameter(1, logName);
+        	
+        	if(YDataBaseType.MSSQL == db.getDatabaseType())
+			{
+        		
+				sql = "SELECT 'true' WHERE EXISTS (SELECT * FROM ORG_USER WHERE LOGNAME = ?)";
+			}
+			else
+			{
+				Exception e = new Exception("不支持的数据库类型！");
+				throw e;
+			}
+        	
+            //执行
+        	YDataTable table = db.executeSqlReturnData(sql, ps);
+        	if(table == null)
+        	{
+        		Exception e = new Exception("获取数据出错！" + db.getLastErrorMessage());
+				throw e;
+        	}
+        	else if(table.rowCount() > 0)
+        	{
+        		retValue = true;
+        	}
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+
+        return retValue;
+    }
+	
+	/**
+	 * 获取指定组织机构id的用户列表。
+	 * @param orgId 组织机构id。
+	 * @return 成功返回用户列表，否则返回null。
+	 */
+	public List<UserInfo> getUsersByOrganizationId(int orgId)
+	{
+		List<UserInfo> users = null;
+		
+		try
+		{
+			if(this.userDatabase.connectDataBase())
+			{
+				users = this.getUsersByOrganizationId(orgId, this.userDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("连接数据库失败！" + this.userDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.userDatabase.disconnectDataBase();
+		}
+		
+		return users;
+	}
+	
+	/**
+	 * 获取指定组织机构id的用户列表。
+	 * @param orgId 组织机构id。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回用户列表，否则返回null。
+	 */
+	public List<UserInfo> getUsersByOrganizationId(int orgId,YDataBase db)
+	{
+		List<UserInfo> users = null;
+		
+		try
+		{
+			//构建SQL语句
+			String sql = "";
+			
+			if(orgId == -1)
+			{
+				//顶级机构
+				if(YDataBaseType.MSSQL == db.getDatabaseType())
+				{
+					sql = "SELECT * FROM ORG_USER WHERE ISDELETE = 'N' AND ORGANIZATIONID IS NULL AND ID <> 1 ORDER BY [ORDER] ASC";
+				}
+				else
+				{
+					Exception e = new Exception("不支持的数据库类型！");
+					throw e;
+				}
+			}
+			else
+			{
+				//下级机构
+				if(YDataBaseType.MSSQL == db.getDatabaseType())
+				{
+					sql = "SELECT * FROM ORG_USER WHERE ISDELETE = 'N' AND ORGANIZATIONID = ? AND ID <> 1 ORDER BY [ORDER] ASC";
+				}
+				else
+				{
+					Exception e = new Exception("不支持的数据库类型！");
+					throw e;
+				}
+			}
+			
+			YDataTable table = null;
+			if(orgId == -1)
+			{
+				//顶级机构
+				table = db.executeSqlReturnData(sql);
+			}
+			else
+			{
+				//参数
+				YSqlParameters ps = new YSqlParameters();
+				ps.addParameter(1, orgId);
+				
+				table = db.executeSqlReturnData(sql,ps);
+			}
+			
+			if(null != table)
+			{
+				users = new ArrayList<UserInfo>();
+				
+				for(int i = 0;i < table.rowCount();i++)
+				{
+					UserInfo u = new UserInfo();
+					
+					if(null != table.getData(i,"ID"))
+					{
+						u.setId((Integer)table.getData(i,"ID"));
+					}
+					
+					if(null != table.getData(i,"NAME"))
+					{
+						u.setName((String)table.getData(i,"NAME"));
+					}
+					
+					if(null != table.getData(i,"ORGANIZATIONID"))
+					{
+						u.setOrganizationId((Integer)table.getData(i,"ORGANIZATIONID"));
+					}
+					
+					if(null != table.getData(i, "LOGNAME"))
+					{
+						u.setLogName((String)table.getData(i, "LOGNAME"));
+					}
+					
+					if(null != table.getData(i, "LOGPASSWORD"))
+					{
+						u.setLogPassword((String)table.getData(i, "LOGPASSWORD"));
+					}
+					
+					if(null != table.getData(i, "ISDELETE"))
+					{
+						String isDelete = (String)table.getData(i, "ISDELETE");
+						if(isDelete.equals("N"))
+						{
+							u.setDelete(false);
+						}
+						else
+						{
+							u.setDelete(true);
+						}
+					}
+					
+					if(null != table.getData(i, "ORDER"))
+					{
+						u.setOrder((Integer)table.getData(i, "ORDER"));
+					}
+					
+					users.add(u);
+				}
+			}
+			else
+			{
+				Exception e = new Exception(db.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		
+		return users;
 	}
 }

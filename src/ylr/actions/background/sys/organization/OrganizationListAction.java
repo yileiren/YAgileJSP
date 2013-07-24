@@ -5,6 +5,8 @@ import java.util.List;
 import ylr.actions.background.sys.SystemConfig;
 import ylr.database.system.organization.OrganizationDataBase;
 import ylr.database.system.organization.OrganizationInfo;
+import ylr.database.system.organization.UserDataBase;
+import ylr.database.system.organization.UserInfo;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -32,6 +34,11 @@ public class OrganizationListAction extends ActionSupport
 	 * 获取的组织机构列表。
 	 */
 	private List<OrganizationInfo> orgs = null;
+	
+	/**
+	 * 用户列表。
+	 */
+	private List<UserInfo> users = null;
 	
 	/**
 	 * 上级机构
@@ -70,10 +77,27 @@ public class OrganizationListAction extends ActionSupport
 						throw e;
 					}
 				}
+				
+				//获取用户列表
+				UserDataBase udb = UserDataBase.createUserDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
+				if(udb != null)
+				{
+					this.users = udb.getUsersByOrganizationId(this.parentId);
+					if(this.users == null)
+					{
+						Exception e = new Exception("获取用户列表出错！" + db.getLastErrorMessage());
+						throw e;
+					}
+				}
+				else
+				{
+					Exception e = new Exception("创建用户数据库访问对象失败！");
+					throw e;
+				}
 			}
 			else
 			{
-				Exception e = new Exception("创建数据库访问对象失败！");
+				Exception e = new Exception("创建组织机构数据库访问对象失败！");
 				throw e;
 			}
 		}
@@ -126,6 +150,18 @@ public class OrganizationListAction extends ActionSupport
 	public void setParentOrg(OrganizationInfo parentOrg)
 	{
 		this.parentOrg = parentOrg;
+	}
+
+
+	public List<UserInfo> getUsers()
+	{
+		return users;
+	}
+
+
+	public void setUsers(List<UserInfo> users)
+	{
+		this.users = users;
 	}
 
 }

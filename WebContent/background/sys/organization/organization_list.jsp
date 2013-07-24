@@ -172,28 +172,23 @@
 		</form>
 	</div>
 	</div>
-	<div id="center" data-options="region:'center',title:'<s:property value="parentOrg.name"/>的用户',iconCls:'<s:property value="topMenuIcon"/>',tools:'#menusButtons'" style="padding:3px;background-color:#EEF5FD">
-	<form id="itemMenuForm" method="post">
+	<div id="center" data-options="region:'center',title:'“<s:property value="parentOrg.name"/>”的用户',iconCls:'<s:property value="topMenuIcon"/>',tools:'#menusButtons'" style="padding:3px;background-color:#EEF5FD">
+	<form id="userForm" method="post">
 		<table class="listTable" style="width:100%;">
 			<tr class="tableHead">
 			<th style="width:30px;">选择</th>
-			<th>名称</th>
-			<th style="width:100px;">图标</th>
-			<th style="width:100px;">桌面图标</th>
+			<th style="width:100px;">姓名</th>
+			<th style="width:100px;">登陆名</th>
 			<th style="width:30px;">序号</th>
-			<th style="width:120px;">关联页面</th>
+			<th></th>
 			</tr>
-		<s:iterator value="childMenus" id="menu">
+		<s:iterator value="users" id="user">
 			<tr class="tableBody1">
-			<td style="text-align:center;"><input type="checkbox" name="chkItem" value="<s:property value="#menu.id"/>" /></td>
-			<td><s:property value="#menu.name"/></td>
-			<td style="text-align:center;"><s:property value="#menu.icon"/></td>
-			<td style="text-align:center;"><s:property value="#menu.desktopIcon"/></td>
-			<td style="text-align:center;"><s:property value="#menu.order"/></td>
-			<td style="text-align:center">
-                <a id="butSetPage" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-supplies'" 
-                	onclick="javascript:window.parent.popupsWindow('#popups', '关联页面', 640, 480, '<%=basePath%>/background/sys/menu/menuPageList.action?menuId=<s:property value="#menu.id"/>', 'icon-supplies', true, true);">关联页面</a>
-            </td>
+			<td style="text-align:center;"><input type="checkbox" name="chkUser" value="<s:property value="#user.id"/>" /></td>
+			<td style="text-align:center;"><s:property value="#user.name"/></td>
+			<td style="text-align:center;"><s:property value="#user.logName"/></td>
+			<td style="text-align:center;"><s:property value="#user.order"/></td>
+			<td></td>
 			</tr>
 		</s:iterator>
 		</table>
