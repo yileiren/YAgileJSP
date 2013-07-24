@@ -497,7 +497,16 @@ public class OrganizationDataBase
 		{
 			if(this.organizationDatabase.connectDataBase())
 			{
-				retValue = this.changeOrganization(org,this.organizationDatabase);
+				//开启事务
+				if(this.organizationDatabase.beginTransaction())
+				{
+					retValue = this.changeOrganization(org,this.organizationDatabase);
+				}
+				else
+				{
+					Exception e = new Exception("开启事务失败失败！" + this.organizationDatabase.getLastErrorMessage());
+					throw e;
+				}
 			}
 			else
 			{
@@ -511,6 +520,16 @@ public class OrganizationDataBase
 		}
 		finally
 		{
+			if(retValue)
+			{
+				//提交事务
+				this.organizationDatabase.commitTransaction();
+			}
+			else
+			{
+				//回滚事务
+				this.organizationDatabase.rollbackTransaction();
+			}
 			this.organizationDatabase.disconnectDataBase();
 		}
 		
@@ -585,6 +604,159 @@ public class OrganizationDataBase
 					Exception e = new Exception("更新数据失败！" + db.getLastErrorMessage());
 					throw e;
 				}
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 删除组织机构。
+	 * 
+	 * @param ids 组织机构id。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean deleteOrganizations(int[] ids)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			if(this.organizationDatabase.connectDataBase())
+			{
+				retValue = this.deleteOrganizations(ids, this.organizationDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("连接数据库出错！" + this.organizationDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 删除组织机构。
+	 * 
+	 * @param ids 组织机构id。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean deleteOrganizations(int[] ids,YDataBase db)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			if(ids.length > 0)
+			{
+				for(int i = 0;i < ids.length;i++)
+				{
+					if(!this.deleteOrganization(ids[i], db))
+					{
+						Exception e = new Exception(db.getLastErrorMessage());
+						throw e;
+					}
+				}
+				
+				retValue = true;
+			}
+			else
+			{
+				Exception e = new Exception("未指定要删除的机构id。");
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 删除指定id的组织机构。
+	 * 
+	 * @param id 组织机构id。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean deleteOrganization(int id,YDataBase db)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			//获取下级机构。
+			List<OrganizationInfo> orgs = this.getOrganizationsByParentId(id,db);
+			if(orgs != null)
+			{
+				//删除下级机构
+				for(int i = 0;i < orgs.size();i++)
+				{
+					if(!this.deleteOrganization(orgs.get(i).getId(), db))
+					{
+						Exception e = new Exception("删除下级机构出错！" + db.getLastErrorMessage());
+						throw e;
+					}
+				}
+				
+				//删除用户
+				UserDataBase udb = new UserDataBase();
+				if(udb.deleteUsersByOrganizationId(id, db))
+				{
+					//删除机构
+					String sql = "";
+					switch(db.getDatabaseType())
+					{
+					case MSSQL:
+						{
+							sql = "UPDATE ORG_ORGANIZATION SET ISDELETE = 'Y' WHERE ID = ?";
+							break;
+						}
+					default:
+						{
+							Exception e = new Exception("不支持的数据库类型！");
+							throw e;
+						}
+					}
+					
+					//参数
+					YSqlParameters ps = new YSqlParameters();
+					ps.addParameter(1, id);
+					
+					//执行语句。
+					int rowCount = db.executeSqlWithOutData(sql,ps);
+					if(rowCount >= 0)
+					{
+						retValue = true;
+					}
+					else
+					{
+						Exception e = new Exception(db.getLastErrorMessage());
+						throw e;
+					}
+				}
+				else
+				{
+					Exception e = new Exception("删除下级用户出错！" + db.getLastErrorMessage());
+					throw e;
+				}
+			}
+			else
+			{
+				Exception e = new Exception("获取下级机构出错！" + db.getLastErrorMessage());
+				throw e;
 			}
 		}
 		catch(Exception ex)

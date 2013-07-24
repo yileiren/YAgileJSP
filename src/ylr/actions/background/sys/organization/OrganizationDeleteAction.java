@@ -1,16 +1,17 @@
 package ylr.actions.background.sys.organization;
 
 import ylr.actions.background.sys.SystemConfig;
-import ylr.database.system.organization.UserDataBase;
+import ylr.database.system.organization.OrganizationDataBase;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
- * 删除用户。
- * @author 董帅 创建时间：2013-07-24 14:06:57
+ * 删除组织机构。
+ * 
+ * @author 董帅 创建时间：2013-07-24 15:04:39
  *
  */
-public class UserDeleteAction extends ActionSupport
+public class OrganizationDeleteAction extends ActionSupport
 {
 	private static final long serialVersionUID = 1L;
 
@@ -19,7 +20,7 @@ public class UserDeleteAction extends ActionSupport
 	 */
 	private int parentId = -1;
 	
-	private String chkUser = "";
+	private String chkOrg = "";
 	
 	private String message = "";
 	
@@ -27,7 +28,7 @@ public class UserDeleteAction extends ActionSupport
 	{
 		try
 		{
-			String[] sids = this.chkUser.split(",");
+			String[] sids = this.chkOrg.split(",");
 			if(sids.length > 0)
 			{
 				int[] ids = new int[sids.length];
@@ -36,10 +37,10 @@ public class UserDeleteAction extends ActionSupport
 					ids[i] = Integer.valueOf(sids[i].trim());
 				}
 				
-				UserDataBase db = UserDataBase.createUserDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
+				OrganizationDataBase db = OrganizationDataBase.createOrganizationDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
 				if(null != db)
 				{
-					if(!db.deleteUsers(ids))
+					if(!db.deleteOrganizations(ids))
 					{
 						Exception e = new Exception("删除数据出错！" + db.getLastErrorMessage());
 						throw e;
@@ -53,13 +54,13 @@ public class UserDeleteAction extends ActionSupport
 			}
 			else
 			{
-				Exception e = new Exception("未指定要删除的用户！");
+				Exception e = new Exception("未指定要删除的组织机构！");
 				throw e;
 			}
 		}
 		catch(Exception ex)
 		{
-			this.setMessage(ex.getMessage());
+			this.message = ex.getMessage();
 		}
 		
 		return NONE;
@@ -75,14 +76,14 @@ public class UserDeleteAction extends ActionSupport
 		this.parentId = parentId;
 	}
 
-	public String getChkUser()
+	public String getChkOrg()
 	{
-		return chkUser;
+		return chkOrg;
 	}
 
-	public void setChkUser(String chkUser)
+	public void setChkOrg(String chkOrg)
 	{
-		this.chkUser = chkUser;
+		this.chkOrg = chkOrg;
 	}
 
 	public String getMessage()

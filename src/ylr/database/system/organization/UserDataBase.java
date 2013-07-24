@@ -1011,6 +1011,10 @@ public class UserDataBase
 		{
 			this.lastErrorMessage = ex.getMessage();
 		}
+		finally
+		{
+			this.userDatabase.disconnectDataBase();
+		}
 		
 		return retValue;
 	}
@@ -1070,6 +1074,61 @@ public class UserDataBase
 			else
 			{
 				Exception e = new Exception("未指定要删除的用户id！");
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 删除指定组织机构的用户。
+	 * 
+	 * @param orgid 组织机构id。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean deleteUsersByOrganizationId(int orgid,YDataBase db)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			//构建语句
+			String sql = "";
+			
+			switch(db.getDatabaseType())
+			{
+			case MSSQL:
+				{
+					//SqlServer数据库
+					sql = "UPDATE ORG_USER SET ISDELETE = 'Y' WHERE ORGANIZATIONID = ?";
+					break;
+				}
+			default:
+				{
+					Exception e = new Exception("不支持的数据库类型！");
+					throw e;
+				}
+			}
+			
+			//参数
+			YSqlParameters ps = new YSqlParameters();
+			ps.addParameter(1, orgid);
+			
+			//执行语句。
+			int rowCount = db.executeSqlWithOutData(sql,ps);
+			if(rowCount >= 0)
+			{
+				retValue = true;
+			}
+			else
+			{
+				Exception e = new Exception(db.getLastErrorMessage());
 				throw e;
 			}
 		}

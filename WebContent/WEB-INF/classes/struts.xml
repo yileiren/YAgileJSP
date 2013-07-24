@@ -166,5 +166,15 @@
 			<!-- 使用此拦截器 -->  
             <interceptor-ref name="mainInterceptor" />
 		</action>
+		
+		<!-- 删除组织机构 -->
+		<action name="organizationDelete" class="ylr.actions.background.sys.organization.OrganizationDeleteAction">
+			<result name="none" type="chain">
+				<param name="actionName">organizationList</param>
+				<param name="namespace">/background</param>
+			</result>
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
 	</package>
 </struts>

@@ -70,25 +70,25 @@
 
         /*!
          * \brief
-         * 删除选中的分组。
-         * 作者：董帅 创建时间：2013-07-16 13:18:00
+         * 删除选中的组织机构。
+         * 作者：董帅 创建时间：2013-07-24 15:15:10
          */
-        function deleteGroups()
+        function deleteOrgs()
         {
             //判断选中
-            if ($("input:checked[type='checkbox'][name='chkGroup']").length > 0)
+            if ($("input:checked[type='checkbox'][name='chkOrg']").length > 0)
             {
-            	window.parent.$.messager.confirm("提示", "确认要删除选中的分组？删除分组将连同子菜单一并删除，并且无法恢复！", function(r){
+            	window.parent.$.messager.confirm("提示", "确认要删除选中的组织机构？删除机构将连同子机构和用户一并删除！", function(r){
     				if (r)
     				{
-    					$("#topMenuForm").attr("action","<%=basePath%>/background/sys/menu/menuDelete.action?type=group");
-    					$("#topMenuForm").submit();
+    					$("#orgForm").attr("action","<%=basePath%>/background/sys/organization/organizationDelete.action");
+    					$("#orgForm").submit();
     				}
     			});
             }
             else
             {
-            	window.parent.$.messager.alert("提示","请选中要删除的分组！","info");
+            	window.parent.$.messager.alert("提示","请选中要删除的组织机构！","info");
             }
         }
 
@@ -198,7 +198,7 @@
 		<s:if test="parentId!=-1"><a href="#" class="icon-back" title="返回上级" onclick="javascript:location.href='<%=basePath%>/background/sys/organization/organizationList.action?parentId=<s:property value="parentOrg.parentId"/>'"></a></s:if>
 		<a href="#" class="icon-add" title="新增组织机构" onclick="javascript:addOrg();"></a>
 		<a href="#" class="icon-edit" title="修改组织机构" onclick="javascript:editOrg();"></a>
-		<a href="#" class="icon-cancel" title="删除组织机构" onclick="javascript:deleteGroups();"></a>
+		<a href="#" class="icon-cancel" title="删除组织机构" onclick="javascript:deleteOrgs();"></a>
 	</div>
     <div id="menusButtons">
 		<a href="#" class="icon-add" title="新增用户" onclick="javascript:addUser();"></a>
