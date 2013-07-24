@@ -104,20 +104,20 @@
 
         /*!
          * \brief
-         * 编辑菜单。
-         * 作者：董帅 创建时间：2013-07-16 13:18:15
+         * 编辑用户。
+         * 作者：董帅 创建时间：2013-07-24 10:30:30
          */
-        function editMenu()
+        function editUser()
         {
             //判断选中
-            if ($("input:checked[type='checkbox'][name='chkItem']").length != 1)
+            if ($("input:checked[type='checkbox'][name='chkUser']").length != 1)
             {
-            	window.parent.$.messager.alert("提示","请选中要编辑的菜单，一次只能选择一个！","info");
+            	window.parent.$.messager.alert("提示","请选中要修改的用户，一次只能选择一个！","info");
                 return;
             }
             
             //打开编辑页面
-            window.parent.popupsWindow("#popups", "修改菜单", 700, 230, "<%=basePath%>/background/sys/menu/menuQuery.action?menuId=" + $("input:checked[type='checkbox'][name='chkItem']").eq(0).val() + "&parentId=<s:property value="topMenuId"/>", "icon-edit", true, true);
+            window.parent.popupsWindow("#popups", "修改用户", 700, 230, "<%=basePath%>/background/sys/organization/userQuery.action?parentId=<s:property value="parentId"/>&userId=" + $("input:checked[type='checkbox'][name='chkUser']").eq(0).val(), "icon-edit", true, true);
         }
 
         /*!
@@ -201,9 +201,9 @@
 		<a href="#" class="icon-cancel" title="删除组织机构" onclick="javascript:deleteGroups();"></a>
 	</div>
     <div id="menusButtons">
-		<a href="#" class="icon-add" onclick="javascript:addUser();"></a>
-		<a href="#" class="icon-edit" onclick="javascript:editMenu();"></a>
-		<a href="#" class="icon-cancel" onclick="javascript:deleteItem();"></a>
+		<a href="#" class="icon-add" title="新增用户" onclick="javascript:addUser();"></a>
+		<a href="#" class="icon-edit" title="修改用户" onclick="javascript:editUser();"></a>
+		<a href="#" class="icon-cancel" title="删除用户" onclick="javascript:deleteItem();"></a>
 	</div>
 </body>
 </html>

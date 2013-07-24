@@ -67,8 +67,8 @@ public class UserSaveAction extends ActionSupport
 			}
 			else
 			{
+				this.user.setId(this.userId);
 				this.user.setOrganizationId(this.parentId);
-				this.user.setLogPassword(MD5Encrypt.getMD5(this.user.getLogPassword()));
 				
 				UserDataBase db = UserDataBase.createUserDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
 				
@@ -77,6 +77,7 @@ public class UserSaveAction extends ActionSupport
 					if(this.userId == -1)
 					{
 						//新增
+						this.user.setLogPassword(MD5Encrypt.getMD5(this.user.getLogPassword()));
 		            	int rId = db.createUser(this.user);
 		            	if(rId > 0)
 		            	{
@@ -95,6 +96,37 @@ public class UserSaveAction extends ActionSupport
 		            		Exception e = new Exception("创建用户失败！" + db.getLastErrorMessage());
 		    				throw e;
 		            	}
+					}
+					else
+					{
+						//修改
+						if(db.changeUser(this.user))
+						{
+							if(!this.user.getLogPassword().equals(""))
+							{
+								//修改密码
+								if(!db.changePassword(this.userId, MD5Encrypt.getMD5(this.user.getLogPassword())))
+								{
+									Exception e = new Exception("修改用户密码失败！" + db.getLastErrorMessage());
+				    				throw e;
+								}
+							}
+						}
+						else
+						{
+							Exception e = new Exception("修改用户信息失败！" + db.getLastErrorMessage());
+		    				throw e;
+						}
+						
+						retValue = SUCCESS;
+	            		
+	            		//设置跳转地址
+						HttpServletRequest request = ServletActionContext.getRequest();
+						this.setCenterIframeURL(request.getScheme() 
+								+ "://" + request.getServerName() 
+								+ ":" + request.getServerPort() 
+								+request.getContextPath() 
+								+ "/background/sys/organization/organizationList.action?parentId=" + String.valueOf(this.parentId));
 					}
 				}
 				else

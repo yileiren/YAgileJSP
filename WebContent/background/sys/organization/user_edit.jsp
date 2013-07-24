@@ -55,7 +55,7 @@
                 $("#logPassword2").val(hex_md5($("#logPassword2").val()));
             }
 
-            if (!$("#orgOrder").validatebox("isValid"))
+            if (!$("#userOrder").validatebox("isValid"))
             {
                 return false;
             }
@@ -93,10 +93,10 @@
 		<input type="hidden" id="parentId" name="parentId" value="<s:property value="parentId" />" />
 		<table class="editTable" style="width:100%;">
             <tr><th style="width:120px">姓名：</th><td><input type="input" id="userName" name="user.name" value="<s:property value="user.name" />" class="easyui-validatebox" data-options="required:true" maxlength="20" style="width:300px" /></td></tr>
-            <tr><th style="width:120px">登陆名：</th><td><input type="input" id="userLogName" name="user.logName" value="<s:property value="user.logName" />" class="easyui-validatebox" data-options="required:true" maxlength="20" style="width:300px" /></td></tr>
+            <tr><th style="width:120px">登陆名：</th><td><input type="input" id="userLogName" name="user.logName" value="<s:property value="user.logName" />" <s:if test="user != null">readonly="readonly"</s:if> class="easyui-validatebox" data-options="required:true" maxlength="20" style="width:300px" /></td></tr>
             <tr><th style="width:120px">登陆密码：</th><td><input type="password" id="logPassword" name="user.logPassword" maxlength="20" style="width:300px" /></td></tr>
             <tr><th style="width:120px">确认密码：</th><td><input type="password" id="logPassword2" name="logPassword2" maxlength="20" style="width:300px" /></td></tr>
-            <tr><th style="width:120px">序号：</th><td><input type="text" id="orgOrder" name="user.order" class="easyui-numberspinner" data-options="min:0,max:50000,precision:0" value="<s:if test="org==nulll">0</s:if><s:else><s:property value="org.order" /></s:else>" style="width:100px;text-align:right;" /></td></tr>
+            <tr><th style="width:120px">序号：</th><td><input type="text" id="userOrder" name="user.order" class="easyui-numberspinner" data-options="min:0,max:50000,precision:0" value="<s:if test="user==nulll">0</s:if><s:else><s:property value="user.order" /></s:else>" style="width:100px;text-align:right;" /></td></tr>
         </table>
     </form>
 	</div>

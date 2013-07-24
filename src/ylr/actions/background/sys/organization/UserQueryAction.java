@@ -1,5 +1,7 @@
 package ylr.actions.background.sys.organization;
 
+import ylr.actions.background.sys.SystemConfig;
+import ylr.database.system.organization.UserDataBase;
 import ylr.database.system.organization.UserInfo;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -26,6 +28,33 @@ public class UserQueryAction extends ActionSupport
 	
 	public String execute()
 	{
+		try
+		{
+			if(this.userId > 0)
+			{
+				//修改用户获取用户信息
+				UserDataBase udb = UserDataBase.createUserDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
+				if(udb != null)
+				{
+					this.user = udb.getUser(this.userId);
+					if(this.user == null)
+					{
+						Exception e = new Exception("获取用户信息出错！" + udb.getLastErrorMessage());
+						throw e;
+					}
+				}
+				else
+				{
+					Exception e = new Exception("创建用户数据库访问对象失败！");
+					throw e;
+				}
+			}
+		}
+		catch(Exception ex)
+		{
+			this.message = ex.getMessage();
+		}
+		
 		return NONE;
 	}
 

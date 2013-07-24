@@ -85,7 +85,7 @@ public class OrganizationListAction extends ActionSupport
 					this.users = udb.getUsersByOrganizationId(this.parentId);
 					if(this.users == null)
 					{
-						Exception e = new Exception("获取用户列表出错！" + db.getLastErrorMessage());
+						Exception e = new Exception("获取用户列表出错！" + udb.getLastErrorMessage());
 						throw e;
 					}
 				}

@@ -1,7 +1,6 @@
 package ylr.database.system.organization;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import ylr.YDB.YDataBase;
@@ -287,6 +286,99 @@ public class UserDataBase
 			else if(rowCount == 0)
 			{
 				Exception e = new Exception("原密码输入错误。");
+				throw e;
+			}
+			else
+			{
+				Exception e = new Exception(db.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 修改用户密码。
+	 * 
+	 * @param id 用户id。
+	 * @param newPsw 新密码。
+	 * 
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean changePassword(int id,String newPsw)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			if(this.userDatabase.connectDataBase())
+			{
+				retValue = this.changePassword(id, newPsw, this.userDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.userDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.userDatabase.disconnectDataBase();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 修改用户密码。
+	 * 
+	 * @param id 用户id。
+	 * @param newPsw 新密码。
+	 * @param db 使用的数据库连接。
+	 * 
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean changePassword(int id,String newPsw,YDataBase db)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			//构建SQL语句
+			String sql = "";
+			if(YDataBaseType.MSSQL == db.getDatabaseType())
+			{
+				sql = "UPDATE ORG_USER SET LOGPASSWORD = ? WHERE ID = ?";
+			}
+			else
+			{
+				Exception e = new Exception("不支持的数据库类型！");
+				throw e;
+			}
+			
+			//参数
+			YSqlParameters ps = new YSqlParameters();
+			ps.addParameter(1, newPsw);
+			ps.addParameter(2, id);
+			
+			//执行语句
+			int rowCount = db.executeSqlWithOutData(sql, ps);
+			if(rowCount > 0)
+			{
+				retValue = true;
+			}
+			else if(rowCount == 0)
+			{
+				Exception e = new Exception("修改密码失败。");
 				throw e;
 			}
 			else
@@ -670,5 +762,226 @@ public class UserDataBase
 		}
 		
 		return users;
+	}
+	
+	/**
+	 * 获取指定的用户。
+	 * @param id 用户id。
+	 * @return 成功返回用户信息，否则返回null。
+	 */
+	public UserInfo getUser(int id)
+	{
+		UserInfo user = null;
+		
+		try
+		{
+			if(this.userDatabase.connectDataBase())
+			{
+				user = this.getUser(id, this.userDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("连接数据库失败！" + this.userDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.userDatabase.disconnectDataBase();
+		}
+		
+		return user;
+	}
+	
+	/**
+	 * 获取指定的用户。
+	 * @param id 用户id。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回用户信息，否则返回null。
+	 */
+	public UserInfo getUser(int id,YDataBase db)
+	{
+		UserInfo user = null;
+		
+		try
+		{
+			//构建SQL语句
+        	String sql = "";
+        	YSqlParameters ps = new YSqlParameters();
+        	ps.addParameter(1, id);
+        	
+        	if(YDataBaseType.MSSQL == db.getDatabaseType())
+			{
+        		
+				sql = "SELECT TOP(1) * FROM ORG_USER WHERE ISDELETE = 'N' AND ID = ?";
+			}
+			else
+			{
+				Exception e = new Exception("不支持的数据库类型！");
+				throw e;
+			}
+        	
+            //执行
+        	YDataTable table = db.executeSqlReturnData(sql, ps);
+        	if(table != null)
+        	{
+        		if(table.rowCount() > 0)
+        		{
+        			user = new UserInfo();
+        			
+        			if(null != table.getData(0,"ID"))
+					{
+						user.setId((Integer)table.getData(0,"ID"));
+					}
+					
+					if(null != table.getData(0,"NAME"))
+					{
+						user.setName((String)table.getData(0,"NAME"));
+					}
+					
+					if(null != table.getData(0,"ORGANIZATIONID"))
+					{
+						user.setOrganizationId((Integer)table.getData(0,"ORGANIZATIONID"));
+					}
+					
+					if(null != table.getData(0, "LOGNAME"))
+					{
+						user.setLogName((String)table.getData(0, "LOGNAME"));
+					}
+					
+					if(null != table.getData(0, "LOGPASSWORD"))
+					{
+						user.setLogPassword((String)table.getData(0, "LOGPASSWORD"));
+					}
+					
+					if(null != table.getData(0, "ISDELETE"))
+					{
+						String isDelete = (String)table.getData(0, "ISDELETE");
+						if(isDelete.equals("N"))
+						{
+							user.setDelete(false);
+						}
+						else
+						{
+							user.setDelete(true);
+						}
+					}
+					
+					if(null != table.getData(0, "ORDER"))
+					{
+						user.setOrder((Integer)table.getData(0, "ORDER"));
+					}
+        		}
+        		else
+        		{
+        			Exception e = new Exception("未找到指定用户！" + db.getLastErrorMessage());
+    				throw e;
+        		}
+        	}
+        	else
+        	{
+        		Exception e = new Exception("获取数据出错！" + db.getLastErrorMessage());
+				throw e;
+        	}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		
+		return user;
+	}
+	
+	/**
+	 * 修改用户信息（不改变用户密码和所属机构）。
+	 * @param user 用户信息。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean changeUser(UserInfo user)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			if(this.userDatabase.connectDataBase())
+			{
+				retValue = this.changeUser(user, this.userDatabase);
+			}
+			else
+			{
+				Exception e = new Exception("连接数据库失败！" + this.userDatabase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.userDatabase.disconnectDataBase();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 修改用户信息（不改变用户密码和所属机构）。
+	 * @param user 用户信息。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean changeUser(UserInfo user,YDataBase db)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			//构建SQL语句
+			String sql = "";
+			if(YDataBaseType.MSSQL == db.getDatabaseType())
+			{
+				sql = "UPDATE ORG_USER SET LOGNAME = ?, NAME = ?,[ORDER] = ? WHERE ID = ?";
+			}
+			else
+			{
+				Exception e = new Exception("不支持的数据库类型！");
+				throw e;
+			}
+			
+			//参数
+			YSqlParameters ps = new YSqlParameters();
+			ps.addParameter(1, user.getLogName());
+			ps.addParameter(2, user.getName());
+			ps.addParameter(3, user.getOrder());
+			ps.addParameter(4, user.getId());
+			
+			//执行语句
+			int rowCount = db.executeSqlWithOutData(sql, ps);
+			if(rowCount > 0)
+			{
+				retValue = true;
+			}
+			else if(rowCount == 0)
+			{
+				Exception e = new Exception("修改信息失败，未找到指定的用户。");
+				throw e;
+			}
+			else
+			{
+				Exception e = new Exception(db.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		
+		return retValue;
 	}
 }
