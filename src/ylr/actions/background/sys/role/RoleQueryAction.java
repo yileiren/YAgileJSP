@@ -27,7 +27,6 @@ public class RoleQueryAction extends ActionSupport
 		{
 			if(this.roleId != -1)
 			{
-				
 				//修改
 				RoleDataBase db = RoleDataBase.createRoleDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
 				if(null != db)

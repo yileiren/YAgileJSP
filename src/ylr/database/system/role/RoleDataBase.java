@@ -465,4 +465,149 @@ public class RoleDataBase
 		
 		return retValue;
 	}
+	
+	/**
+	 * 获取选中的菜单。
+	 * @param roleId 角色id。 
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回菜单列表，否则返回null。
+	 */
+	public List<RoleMenuInfo> getChouseMenus(int roleId,YDataBase db)
+    {
+        List<RoleMenuInfo> menus = null;
+        
+        try
+        {
+        	//构建SQL语句
+			String menuSql = ""; //菜单。
+			String chouseMenuSql = ""; //选中的菜单。
+			
+			YSqlParameters ps = new YSqlParameters();
+			ps.addParameter(1, roleId);
+			
+			if(YDataBaseType.MSSQL == db.getDatabaseType())
+			{
+				menuSql = "SELECT * FROM SYS_MENUS WHERE PARENTID IS NULL AND ID <> 1 OR ID <> 1 AND PARENTID <> 1 ORDER BY PARENTID ASC,[ORDER] ASC";
+				chouseMenuSql = "SELECT * FROM AUT_ROLE_MENU WHERE ROLEID =  ?";
+			}
+			else
+			{
+				Exception e = new Exception("不支持的数据库类型！");
+				throw e;
+			}
+			
+			//执行语句。
+			YDataTable menuTable = db.executeSqlReturnData(menuSql);
+			YDataTable chouseMenuTable = db.executeSqlReturnData(chouseMenuSql,ps);
+			
+			if(null != menuTable && null != chouseMenuTable)
+			{
+				menus = new ArrayList<RoleMenuInfo>();
+				//构建菜单。
+				for(int i = 0;i < menuTable.rowCount();i++)
+				{
+					if(null == menuTable.getData(i,"PARENTID"))
+					{
+						//顶级菜单
+						RoleMenuInfo pMenu = new RoleMenuInfo();
+						if(null != menuTable.getData(i,"ID"))
+						{
+							pMenu.setId((Integer)menuTable.getData(i,"ID"));
+						}
+						
+						if(null != menuTable.getData(i,"NAME"))
+						{
+							pMenu.setName((String)menuTable.getData(i,"NAME"));
+						}
+						
+						if(null != menuTable.getData(i,"URL"))
+						{
+							pMenu.setURL((String)menuTable.getData(i,"URL"));
+						}
+						
+						if(null != menuTable.getData(i,"PARENTID"))
+						{
+							pMenu.setParentId((Integer)menuTable.getData(i,"PARENTID"));
+						}
+						
+						if(null != menuTable.getData(i,"ICON"))
+						{
+							pMenu.setIcon((String)menuTable.getData(i,"ICON"));
+						}
+						
+						if(null != menuTable.getData(i,"DESKTOPICON"))
+						{
+							pMenu.setDesktopIcon((String)menuTable.getData(i,"DESKTOPICON"));
+						}
+						
+						if(null != menuTable.getData(i,"ORDER"))
+						{
+							pMenu.setOrder((Integer)menuTable.getData(i,"ORDER"));
+						}
+						
+						//判断是否选中
+						
+						for(int j = 0;j < menuTable.rowCount();j++)
+						{
+							
+							if(null != menuTable.getData(j,"PARENTID") && pMenu.getId() == (Integer)menuTable.getData(j,"PARENTID"))
+							{
+								//子菜单
+								RoleMenuInfo cMenu = new RoleMenuInfo();
+								if(null != menuTable.getData(j,"ID"))
+								{
+									cMenu.setId((Integer)menuTable.getData(j,"ID"));
+								}
+								
+								if(null != menuTable.getData(j,"NAME"))
+								{
+									cMenu.setName((String)menuTable.getData(j,"NAME"));
+								}
+								
+								if(null != menuTable.getData(j,"URL"))
+								{
+									cMenu.setURL((String)menuTable.getData(j,"URL"));
+								}
+								
+								if(null != menuTable.getData(j,"PARENTID"))
+								{
+									cMenu.setParentId((Integer)menuTable.getData(j,"PARENTID"));
+								}
+								
+								if(null != menuTable.getData(j,"ICON"))
+								{
+									cMenu.setIcon((String)menuTable.getData(j,"ICON"));
+								}
+								
+								if(null != menuTable.getData(j,"DESKTOPICON"))
+								{
+									cMenu.setDesktopIcon((String)menuTable.getData(j,"DESKTOPICON"));
+								}
+								
+								if(null != menuTable.getData(j,"ORDER"))
+								{
+									cMenu.setOrder((Integer)menuTable.getData(j,"ORDER"));
+								}
+								
+								pMenu.getMenus().add(cMenu);
+							}
+						}
+						
+						menus.add(pMenu);
+					}
+				}
+			}
+			else
+			{
+				Exception e = new Exception(db.getLastErrorMessage());
+				throw e;
+			}
+        }
+        catch(Exception ex)
+        {
+        	this.lastErrorMessage = ex.getMessage();
+        }
+        
+        return menus;
+    }
 }
