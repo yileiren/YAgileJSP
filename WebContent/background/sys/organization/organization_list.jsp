@@ -172,7 +172,7 @@
 		</table>
 	</div>
 	</div>
-	<div id="center" data-options="region:'center',title:'“<s:property value="parentOrg.name"/>”的用户',iconCls:'<s:property value="topMenuIcon"/>',tools:'#menusButtons'" style="padding:3px;background-color:#EEF5FD">
+	<div id="center" data-options="region:'center',iconCls:'icon-user',title:'“<s:property value="parentOrg.name"/>”的用户',tools:'#menusButtons'" style="padding:3px;background-color:#EEF5FD">
 		<table class="listTable" style="width:100%;">
 			<tr class="tableHead">
 			<th style="width:30px;">选择</th>
