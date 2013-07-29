@@ -39,20 +39,20 @@
 		
         /*!
          * \brief
-         * 修改组织机构信息。
-         * 作者：董帅 创建时间：2013-07-19 16:35:40
+         * 修改角色信息。
+         * 作者：董帅 创建时间：2013年07月29日15:42:01
          */
-        function editOrg()
+        function editRole()
         {
             //判断选中
-            if ($("input:checked[type='checkbox'][name='chkOrg']").length != 1)
+            if ($("input:checked[type='checkbox'][name='chkRole']").length != 1)
             {
-            	window.parent.$.messager.alert("提示","请选中要修改的组织机构，一次只能选择一个！","info");
+            	window.parent.$.messager.alert("提示","请选中要修改的角色，一次只能选择一个！","info");
                 return;
             }
 
             //打开编辑页面
-            window.parent.popupsWindow("#popups", "修改组织机构信息", 700, 230, "<%=basePath%>/background/sys/organization/organizationQuery.action?parentId=<s:property value="parentId"/>&orgId=" + $("input:checked[type='checkbox'][name='chkOrg']").eq(0).val(), "icon-edit", true, true);
+            window.parent.popupsWindow("#popups", "修改角色信息", 700, 180, "<%=basePath%>/background/sys/role/roleQuery.action?roleId=" + $("input:checked[type='checkbox'][name='chkRole']").eq(0).val(), "icon-edit", true, true);
         }
 
         /*!
@@ -78,58 +78,6 @@
             	window.parent.$.messager.alert("提示","请选中要删除的组织机构！","info");
             }
         }
-
-        /*!
-         * \brief
-         * 新增用户。
-         * 作者：董帅 创建时间：2013-07-20 22:15:21
-         */
-        function addUser()
-        {
-            window.parent.popupsWindow("#popups", "新增用户", 700, 230, "<%=basePath%>/background/sys/organization/userQuery.action?parentId=<s:property value="parentId"/>", "icon-add", true, true);
-        }
-
-        /*!
-         * \brief
-         * 编辑用户。
-         * 作者：董帅 创建时间：2013-07-24 10:30:30
-         */
-        function editUser()
-        {
-            //判断选中
-            if ($("input:checked[type='checkbox'][name='chkUser']").length != 1)
-            {
-            	window.parent.$.messager.alert("提示","请选中要修改的用户，一次只能选择一个！","info");
-                return;
-            }
-            
-            //打开编辑页面
-            window.parent.popupsWindow("#popups", "修改用户", 700, 230, "<%=basePath%>/background/sys/organization/userQuery.action?parentId=<s:property value="parentId"/>&userId=" + $("input:checked[type='checkbox'][name='chkUser']").eq(0).val(), "icon-edit", true, true);
-        }
-
-        /*!
-         * \brief
-         * 删除用户。
-         * 作者：董帅 创建时间：2013-07-24 14:18:13
-         */
-        function deleteUsers()
-        {
-            //判断选中
-            if ($("input:checked[type='checkbox'][name='chkUser']").length > 0)
-            {
-                window.parent.$.messager.confirm("提示", "确认要删除选中的用户？", function(r){
-     				if (r)
-     				{
-     					$("#orgForm").attr("action","<%=basePath%>/background/sys/organization/userDelete.action");
-     					$("#orgForm").submit();
-     				}
-     			});
-            }
-            else
-            {
-                window.parent.$.messager.alert("提示","请选中要删除的用户！","info");
-            }
-        }
 		
 		$(document).ready(function ()
         {
@@ -145,7 +93,7 @@
 	<div data-options="region:'north', border:'true'" style="height:28px;background-color:#EEF5FD;text-align:right;">
 	    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-menu',plain:'true'">访问菜单</a>
 	    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:'true'" onclick="javascript:addRole();">新增</a>
-	    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:'true'" onclick="javascript:editPage();">修改</a>
+	    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:'true'" onclick="editRole();">修改</a>
 	    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:'true'" onclick="javascript:return deletePages();">删除</a>
     </div>
 	<div id="center" data-options="region:'center'" style="padding:3px;background-color:#EEF5FD">
@@ -158,7 +106,7 @@
 	        </tr>
 	        <s:iterator value="roles" id="role">
             <tr class="tableBody1">
-                <td style="text-align:center;"><input type="checkbox" value="<s:property value="#role.id"/>" name="chkPage" /></td>
+                <td style="text-align:center;"><input type="checkbox" value="<s:property value="#role.id"/>" name="chkRole" /></td>
                 <td style="text-align:center"><s:property value="#role.name"/></td>
                 <td><s:property value="#role.explain"/></td>
             </tr>

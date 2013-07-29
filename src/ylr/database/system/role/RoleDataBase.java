@@ -277,4 +277,192 @@ public class RoleDataBase
 		
 		return roles;
 	}
+	
+	/**
+	 * 获取角色。
+	 * @param id 角色id。
+	 * @return 成功然会角色信息，否则返回null。
+	 */
+	public RoleInfo getRole(int id)
+	{
+		RoleInfo role = null;
+		
+		try
+		{
+			if(this.roleDataBase.connectDataBase())
+			{
+				role = this.getRole(id,this.roleDataBase);
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.roleDataBase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.roleDataBase.disconnectDataBase();
+		}
+		
+		return role;
+	}
+	
+	/**
+	 * 获取角色。
+	 * @param id 角色id。
+	 * @param db 使用的数据库连接。
+	 * @return 成功然会角色信息，否则返回null。
+	 */
+	public RoleInfo getRole(int id,YDataBase db)
+	{
+		RoleInfo role = null;
+		
+		try
+        {
+        	//构建SQL语句
+			String sql = "";
+			YSqlParameters ps = new YSqlParameters();
+			ps.addParameter(1, id);
+			
+			if(YDataBaseType.MSSQL == db.getDatabaseType())
+			{
+				sql = "SELECT * FROM AUT_ROLE WHERE ID = ?";
+			}
+			else
+			{
+				Exception e = new Exception("不支持的数据库类型！");
+				throw e;
+			}
+			
+			//执行语句。
+			YDataTable table = db.executeSqlReturnData(sql,ps);
+			
+			if(null != table)
+			{
+				if(table.rowCount() == 1)
+				{
+					role = new RoleInfo();
+					
+					if(null != table.getData(0,"ID"))
+					{
+						role.setId((Integer)table.getData(0,"ID"));
+					}
+					
+					if(null != table.getData(0,"NAME"))
+					{
+						role.setName((String)table.getData(0,"NAME"));
+					}
+					
+					if(null != table.getData(0,"EXPLAIN"))
+					{
+						role.setExplain((String)table.getData(0,"EXPLAIN"));
+					}
+				}
+				else
+				{
+					Exception e = new Exception("未找到指定的角色！");
+					throw e;
+				}
+			}
+			else
+			{
+				Exception e = new Exception(db.getLastErrorMessage());
+				throw e;
+			}
+        }
+        catch(Exception ex)
+        {
+        	this.lastErrorMessage = ex.getMessage();
+        }
+		
+		return role;
+	}
+	
+	/**
+	 * 修改角色信息。
+	 * 
+	 * @param role 角色信息。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean changeRole(RoleInfo role)
+	{
+		boolean retValue = false;
+		
+		try
+		{
+			if(this.roleDataBase.connectDataBase())
+			{
+				retValue = this.changeRole(role,this.roleDataBase);
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.roleDataBase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.roleDataBase.disconnectDataBase();
+		}
+		
+		return retValue;
+	}
+	
+	/**
+	 * 修改角色信息。
+	 * 
+	 * @param role 角色信息。
+	 * @param db 使用的数据库连接。
+	 * @return 成功返回true，否则返回false。
+	 */
+	public boolean changeRole(RoleInfo role,YDataBase db)
+	{
+		boolean retValue = false;
+		
+		try
+        {
+        	//构建SQL语句
+			String sql = "";
+			YSqlParameters ps = new YSqlParameters();
+			ps.addParameter(1, role.getName());
+			ps.addParameter(2, role.getExplain());
+			ps.addParameter(3, role.getId());
+			
+			if(YDataBaseType.MSSQL == db.getDatabaseType())
+			{
+				sql = "UPDATE AUT_ROLE SET NAME = ?,EXPLAIN = ? WHERE ID = ?";
+			}
+			else
+			{
+				Exception e = new Exception("不支持的数据库类型！");
+				throw e;
+			}
+			
+			//执行语句。
+			int rowCount = db.executeSqlWithOutData(sql, ps);
+			if(rowCount > 0)
+			{
+				retValue = true;
+			}
+			else
+			{
+				Exception e = new Exception(db.getLastErrorMessage());
+				throw e;
+			}
+        }
+        catch(Exception ex)
+        {
+        	this.lastErrorMessage = ex.getMessage();
+        }
+		
+		return retValue;
+	}
 }

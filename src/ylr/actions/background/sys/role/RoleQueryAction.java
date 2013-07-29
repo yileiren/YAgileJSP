@@ -1,5 +1,7 @@
 package ylr.actions.background.sys.role;
 
+import ylr.actions.background.sys.SystemConfig;
+import ylr.database.system.role.RoleDataBase;
 import ylr.database.system.role.RoleInfo;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -25,13 +27,31 @@ public class RoleQueryAction extends ActionSupport
 		{
 			if(this.roleId != -1)
 			{
+				
 				//修改
+				RoleDataBase db = RoleDataBase.createRoleDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
+				if(null != db)
+				{
+					this.role = db.getRole(this.roleId);
+					
+					if(null == this.role)
+					{
+						Exception e = new Exception("获取数据失败！" + db.getLastErrorMessage());
+						throw e;
+					}
+				}
+				else
+				{
+					Exception e = new Exception("创建数据库访问对象失败！");
+					throw e;
+				}
 			}
 		}
 		catch(Exception ex)
 		{
 			this.setMessage(ex.getMessage());
 		}
+		
 		return NONE;
 	}
 

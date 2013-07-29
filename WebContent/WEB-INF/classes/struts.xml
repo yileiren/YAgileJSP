@@ -185,7 +185,7 @@
 		</action>
 		
 		<!-- 获取权限信息 -->
-		<action name="roleQuery" class="ylr.actions.background.sys.role.RoleListAction">
+		<action name="roleQuery" class="ylr.actions.background.sys.role.RoleQueryAction">
 			<result name="none">/background/sys/role/role_edit.jsp</result>
 			
 			<!-- 使用此拦截器 -->  

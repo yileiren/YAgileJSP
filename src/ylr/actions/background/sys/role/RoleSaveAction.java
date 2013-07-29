@@ -66,18 +66,17 @@ public class RoleSaveAction extends ActionSupport
 		        	else
 		        	{
 		        		//修改
-//		        		this.page.setId(this.pageId);
-//		        		this.page.setMenuId(this.menuId);
-//		        		if(db.changePage(this.page))
-//		        		{
-//		        			this.message = "";
-//		        			retValue = SUCCESS;
-//		        		}
-//		        		else
-//		        		{
-//		        			Exception e = new Exception("修改数据出错！" + db.getLastErrorMessage());
-//		    				throw e;
-//		        		}
+		        		this.role.setId(this.roleId);
+		        		if(db.changeRole(this.role))
+		        		{
+		        			this.message = "";
+		        			retValue = SUCCESS;
+		        		}
+		        		else
+		        		{
+		        			Exception e = new Exception("修改数据出错！" + db.getLastErrorMessage());
+		    				throw e;
+		        		}
 		        	}
 		        	
 		        	//设置跳转地址
