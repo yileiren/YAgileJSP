@@ -176,5 +176,28 @@
 			<!-- 使用此拦截器 -->  
             <interceptor-ref name="mainInterceptor" />
 		</action>
+		
+		<!-- 获取权限列表 -->
+		<action name="roleList" class="ylr.actions.background.sys.role.RoleListAction">
+			<result name="none">/background/sys/role/role_list.jsp</result>
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
+		
+		<!-- 获取权限信息 -->
+		<action name="roleQuery" class="ylr.actions.background.sys.role.RoleListAction">
+			<result name="none">/background/sys/role/role_edit.jsp</result>
+			
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
+		
+		<!-- 保存角色信息 -->
+		<action name="roleSave" class="ylr.actions.background.sys.role.RoleSaveAction">
+			<result name="success">/background/message/closePopWindow.jsp</result>
+			<result name="error">/background/sys/organization/role_edit.jsp</result>
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
 	</package>
 </struts>
