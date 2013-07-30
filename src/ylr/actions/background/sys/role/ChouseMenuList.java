@@ -1,7 +1,10 @@
 package ylr.actions.background.sys.role;
 
+import java.util.List;
+
 import ylr.actions.background.sys.SystemConfig;
 import ylr.database.system.role.RoleDataBase;
+import ylr.database.system.role.RoleMenuInfo;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -18,6 +21,8 @@ public class ChouseMenuList extends ActionSupport
 	
 	private String message = "";
 	
+	private List<RoleMenuInfo> menus = null;
+	
 	public String execute()
 	{
 		try
@@ -25,7 +30,13 @@ public class ChouseMenuList extends ActionSupport
 			RoleDataBase db = RoleDataBase.createRoleDataBase(SystemConfig.databaseConfigFileName, SystemConfig.databaseConfigNodeName);
 			if(null != db)
 			{
+				this.menus = db.getChouseMenus(this.roleId);
 				
+				if(this.menus == null)
+				{
+					Exception e = new Exception("获取菜单失败！" + db.getLastErrorMessage());
+					throw e;
+				}
 			}
 			else
 			{
@@ -59,6 +70,16 @@ public class ChouseMenuList extends ActionSupport
 	public void setMessage(String message)
 	{
 		this.message = message;
+	}
+
+	public List<RoleMenuInfo> getMenus()
+	{
+		return menus;
+	}
+
+	public void setMenus(List<RoleMenuInfo> menus)
+	{
+		this.menus = menus;
 	}
 
 }

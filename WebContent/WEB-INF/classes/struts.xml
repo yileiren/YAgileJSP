@@ -199,5 +199,12 @@
 			<!-- 使用此拦截器 -->  
             <interceptor-ref name="mainInterceptor" />
 		</action>
+		
+		<!-- 选中菜单列表 -->
+		<action name="chouseMenuList" class="ylr.actions.background.sys.role.ChouseMenuList">
+			<result name="none">/background/sys/role/chouseMenu_list.jsp</result>
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mainInterceptor" />
+		</action>
 	</package>
 </struts>

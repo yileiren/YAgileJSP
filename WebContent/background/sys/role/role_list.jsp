@@ -78,6 +78,24 @@
             	window.parent.$.messager.alert("提示","请选中要删除的组织机构！","info");
             }
         }
+        
+        /*!
+         * \brief
+         * 权限访问菜单设置。
+         * 作者：董帅 创建时间：2013-07-30 10:31:51
+         */
+        function chouseMenu()
+        {
+            //判断选中
+            if ($("input:checked[type='checkbox'][name='chkRole']").length != 1)
+            {
+            	window.parent.$.messager.alert("提示","请选中要设置的角色，一次只能选择一个！","info");
+                return;
+            }
+
+            //打开编辑页面
+            window.parent.popupsWindow("#popups", "选择菜单", 350, 500, "<%=basePath%>/background/sys/role/chouseMenuList.action?roleId=" + $("input:checked[type='checkbox'][name='chkRole']").eq(0).val(), "icon-menu", true, true);
+        }
 		
 		$(document).ready(function ()
         {
@@ -91,7 +109,7 @@
 </head>
 <body class="easyui-layout">
 	<div data-options="region:'north', border:'true'" style="height:28px;background-color:#EEF5FD;text-align:right;">
-	    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-menu',plain:'true'">访问菜单</a>
+	    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-menu',plain:'true'" onclick="javascript:chouseMenu();">访问菜单</a>
 	    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:'true'" onclick="javascript:addRole();">新增</a>
 	    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:'true'" onclick="editRole();">修改</a>
 	    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:'true'" onclick="javascript:return deletePages();">删除</a>

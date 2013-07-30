@@ -469,6 +469,39 @@ public class RoleDataBase
 	/**
 	 * 获取选中的菜单。
 	 * @param roleId 角色id。 
+	 * @return 成功返回菜单列表，否则返回null。
+	 */
+	public List<RoleMenuInfo> getChouseMenus(int roleId)
+    {
+        List<RoleMenuInfo> menus = null;
+        
+        try
+		{
+			if(this.roleDataBase.connectDataBase())
+			{
+				menus = this.getChouseMenus(roleId,this.roleDataBase);
+			}
+			else
+			{
+				Exception e = new Exception("数据库连接失败！" + this.roleDataBase.getLastErrorMessage());
+				throw e;
+			}
+		}
+		catch(Exception ex)
+		{
+			this.lastErrorMessage = ex.getMessage();
+		}
+		finally
+		{
+			this.roleDataBase.disconnectDataBase();
+		}
+        
+        return menus;
+    }
+	
+	/**
+	 * 获取选中的菜单。
+	 * @param roleId 角色id。 
 	 * @param db 使用的数据库连接。
 	 * @return 成功返回菜单列表，否则返回null。
 	 */
@@ -546,6 +579,14 @@ public class RoleDataBase
 						}
 						
 						//判断是否选中
+						for(int ir = 0;ir < chouseMenuTable.rowCount();ir++)
+						{
+							if(null != chouseMenuTable.getData(i, "MENUID") && pMenu.getId() == (Integer)chouseMenuTable.getData(i, "MENUID"))
+							{
+								pMenu.setChoused(true);
+								break;
+							}
+						}
 						
 						for(int j = 0;j < menuTable.rowCount();j++)
 						{
@@ -587,6 +628,16 @@ public class RoleDataBase
 								if(null != menuTable.getData(j,"ORDER"))
 								{
 									cMenu.setOrder((Integer)menuTable.getData(j,"ORDER"));
+								}
+								
+								//判断是否选中
+								for(int ir = 0;ir < chouseMenuTable.rowCount();ir++)
+								{
+									if(null != chouseMenuTable.getData(i, "MENUID") && cMenu.getId() == (Integer)chouseMenuTable.getData(i, "MENUID"))
+									{
+										cMenu.setChoused(true);
+										break;
+									}
 								}
 								
 								pMenu.getMenus().add(cMenu);
