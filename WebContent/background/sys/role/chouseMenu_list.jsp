@@ -33,9 +33,9 @@
 		<s:iterator value="menus" id="menu">
 		<li><span><input type="checkbox" name="chkItem" <s:if test="#menu.choused">checked="checked"</s:if> value="<s:property value="#menu.id"/>"/><s:property value="#menu.name"/></span>
              <ul >
-		<s:iterator value="#menu.menus" id="cmenu">
+			<s:iterator value="#menu.menus" id="cmenu">
 			<li><span><input type="checkbox" name="chkItem" <s:if test="#cmenu.choused">checked="checked"</s:if> value="<s:property value="#cmenu.id"/>"/><s:property value="#cmenu.name"/></span></li>
-		</s:iterator>
+			</s:iterator>
 			</ul>
 		</li>
 		</s:iterator>
